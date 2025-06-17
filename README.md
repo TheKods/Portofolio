@@ -136,20 +136,46 @@ Rafi Hermawan - [LinkedIn Profile](https://www.linkedin.com/in/rafi-hermawan/) |
 
 The portfolio includes background music for an enhanced user experience:
 
-- Music player automatically detects if local music files are available, otherwise uses CDN
-- Music files are included in the repository for a complete deployment experience
-- Music player uses HTML5 Audio API for efficient playback
-- Tracks are royalty-free with proper attribution in `public/music/CREDITS.md`
+- Music player uses Spotify Web Playback SDK for high-quality streaming
+- Fallback to local files or CDN if Spotify is not available
+- Tracks are properly credited with artist information
 - User controls include play/pause, next/previous track, and volume adjustment
-- Fallback mechanism automatically tries CDN if local files fail to load
+- Secure token handling through serverless API endpoints
 
-### Music Configuration Options
+### Spotify API Configuration
 
-The audio player is designed to work in multiple environments:
+To enable Spotify playback:
 
-1. **Local Development with Local Files**: Uses music files from `/public/music/` folder
-2. **Production with Local Files**: Uses the same local files that are committed to the repository
-3. **Fallback to CDN**: Automatically switches to CDN if local files are not available or fail to load
+1. Create a Spotify Developer account at [developer.spotify.com](https://developer.spotify.com/)
+2. Create a new application and get your Client ID and Client Secret
+3. Add these credentials to your environment variables:
+   ```
+   SPOTIFY_CLIENT_ID=your_client_id
+   SPOTIFY_CLIENT_SECRET=your_client_secret
+   ```
+4. Deploy the serverless function in `src/api/spotify-token.js` to handle authentication
+
+### Using Your Own Spotify Playlist
+
+The audio player is configured to use a specific Spotify playlist. To use your own:
+
+1. Create a playlist on Spotify with your preferred tracks
+2. Get the playlist ID from the URL (e.g., `2DplXBDNnbjfvXphw6hH71` from `https://open.spotify.com/playlist/2DplXBDNnbjfvXphw6hH71`)
+3. Update the `PLAYLIST_ID` constant in `src/components/AudioPlayer.jsx`
+
+The current playlist includes:
+- Memories of Spring - Tokyo Music Walker
+- Colorful Flowers - Tokyo Music Walker
+- Transcendence - CHAOS
+- Echoes in Blue - Tokyo Music Walker
+
+### Fallback Options
+
+The audio player includes multiple fallback mechanisms:
+
+1. **Spotify Web Playback**: Primary method using Spotify's official SDK
+2. **Local Files**: Uses music files from `/public/music/` folder if available
+3. **CDN Fallback**: Uses CDN-hosted files if local files are not available
 
 To exclude large music files from your Git repository, uncomment the relevant line in `.gitignore`:
 ```

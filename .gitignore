@@ -97,3 +97,9 @@ temp
 .sertif
 .vercel
 
+# Uncomment the line below if you don't want to commit music files
+# public/music/*.mp3
+
+# Credentials
+spotify-credentials.md
+

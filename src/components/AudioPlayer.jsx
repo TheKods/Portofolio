@@ -7,265 +7,399 @@ const AudioPlayer = () => {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [volume, setVolume] = useState(40); // Default volume: 40%
   const [showVolumeSlider, setShowVolumeSlider] = useState(true);
-  const [duration, setDuration] = useState(0);
-  const [currentTime, setCurrentTime] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [useLocalFiles, setUseLocalFiles] = useState(false);
+  const [playerReady, setPlayerReady] = useState(false);
+  const [spotifyToken, setSpotifyToken] = useState(null);
+  const [playlistTracks, setPlaylistTracks] = useState([]);
   
-  const audioRef = useRef(null);
+  const playerRef = useRef(null);
+  const deviceIdRef = useRef(null);
   const animationRef = useRef(null);
 
-  // Music track definitions
-  const musicTracks = [
-    { 
-      title: "Colorful Flowers",
-      localPath: "/music/Colorful-Flowers(chosic.com).mp3",
-      cdnPath: "https://cdn.chosic.com/free-music/tracks/Colorful-Flowers(chosic.com).mp3",
-      artist: "Tokyo Music Walker"
-    },
-    { 
-      title: "Echoes In Blue",
-      localPath: "/music/echoes-in-blue-by-tokyo-music-walker-chosic.com_.mp3",
-      cdnPath: "https://cdn.chosic.com/free-music/tracks/echoes-in-blue-by-tokyo-music-walker-chosic.com_.mp3",
-      artist: "Tokyo Music Walker"
-    },
+  // Spotify playlist ID
+  const PLAYLIST_ID = '2DplXBDNnbjfvXphw6hH71';
+
+  // Default tracks in case API fails
+  const defaultTracks = [
     { 
       title: "Memories of Spring",
-      localPath: "/music/Memories-of-Spring(chosic.com).mp3",
-      cdnPath: "https://cdn.chosic.com/free-music/tracks/Memories-of-Spring(chosic.com).mp3",
+      spotifyId: "3Pzl92mMKdr8R2OgzCYgfP",
+      artist: "Tokyo Music Walker"
+    },
+    { 
+      title: "Colorful Flowers",
+      spotifyId: "5atpmQYwk9Jc77pEr0bCrV",
+      artist: "Tokyo Music Walker"
+    },
+    { 
+      title: "Echoes in Blue",
+      spotifyId: "5mHDWWuktxDbbZ7Kjg99Ig",
       artist: "Tokyo Music Walker"
     },
     { 
       title: "Transcendence",
-      localPath: "/music/Transcendence-chosic.com_.mp3",
-      cdnPath: "https://cdn.chosic.com/free-music/tracks/Transcendence-chosic.com_.mp3",
-      artist: "Alexander Nakarada"
+      spotifyId: "27PxTLjW12rVGglXr80Uen",
+      artist: "CHAOS"
     }
   ];
 
-  // Check if local files exist
+  // Set random track on initial load
   useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * (playlistTracks.length || defaultTracks.length));
+    setCurrentTrackIndex(randomIndex);
+  }, [playlistTracks]);
+
+  // Load Spotify Web Playback SDK
+  useEffect(() => {
+    // Add Spotify script if not already loaded
+    if (!window.Spotify) {
+      const script = document.createElement('script');
+      script.src = 'https://sdk.scdn.co/spotify-player.js';
+      script.async = true;
+      document.body.appendChild(script);
+
+      // Define callback for when Spotify SDK is ready
+      window.onSpotifyWebPlaybackSDKReady = () => {
+        initializeSpotifyPlayer();
+      };
+
+      return () => {
+        document.body.removeChild(script);
+        delete window.onSpotifyWebPlaybackSDKReady;
+      };
+    } else {
+      initializeSpotifyPlayer();
+    }
+  }, []);
+
+  // Fetch playlist tracks
+  useEffect(() => {
+    const fetchPlaylistTracks = async () => {
+      if (!spotifyToken) return;
+      
+      try {
+        const response = await fetch(`https://api.spotify.com/v1/playlists/${PLAYLIST_ID}/tracks`, {
+          headers: {
+            'Authorization': `Bearer ${spotifyToken}`
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch playlist tracks');
+        }
+        
+        const data = await response.json();
+        
+        // Extract track info
+        const tracks = data.items.map(item => ({
+          title: item.track.name,
+          spotifyId: item.track.id,
+          artist: item.track.artists.map(artist => artist.name).join(', ')
+        }));
+        
+        setPlaylistTracks(tracks);
+      } catch (error) {
+        console.error('Error fetching playlist tracks:', error);
+        // Use default tracks if playlist fetch fails
+        setPlaylistTracks(defaultTracks);
+      }
+    };
+    
+    fetchPlaylistTracks();
+  }, [spotifyToken]);
+
+  // Initialize Spotify player
+  const initializeSpotifyPlayer = async () => {
+    try {
+      // Get token from your backend or use a client credentials flow
+      // For demo purposes, we'll use a placeholder approach
+      // In a real app, you'd have a secure backend endpoint to get this token
+      const token = await getSpotifyToken();
+      setSpotifyToken(token);
+
+      if (!token) {
+        console.error("No Spotify token available");
+        return;
+      }
+
+      // Create and configure the Spotify player
+      const player = new window.Spotify.Player({
+        name: 'Rafi Portfolio Web Player',
+        getOAuthToken: cb => { cb(token); },
+        volume: volume / 100
+      });
+
+      // Error handling
+      player.addListener('initialization_error', ({ message }) => {
+        console.error('Initialization error:', message);
+        setIsLoading(false);
+        fallbackToLocalAudio();
+      });
+
+      player.addListener('authentication_error', ({ message }) => {
+        console.error('Authentication error:', message);
+        setIsLoading(false);
+        fallbackToLocalAudio();
+      });
+
+      player.addListener('account_error', ({ message }) => {
+        console.error('Account error:', message);
+        setIsLoading(false);
+        fallbackToLocalAudio();
+      });
+
+      player.addListener('playback_error', ({ message }) => {
+        console.error('Playback error:', message);
+        setIsLoading(false);
+      });
+
+      // Playback status updates
+      player.addListener('player_state_changed', state => {
+        if (state) {
+          setIsPlaying(!state.paused);
+          if (state.track_window?.current_track) {
+            // Find the current track in our list by Spotify ID
+            const currentTrack = state.track_window.current_track;
+            const tracks = playlistTracks.length ? playlistTracks : defaultTracks;
+            const foundIndex = tracks.findIndex(
+              track => track.spotifyId === currentTrack.id.split(':').pop()
+            );
+            if (foundIndex !== -1) {
+              setCurrentTrackIndex(foundIndex);
+            }
+          }
+          setIsLoading(false);
+        }
+      });
+
+      // Ready
+      player.addListener('ready', ({ device_id }) => {
+        console.log('Spotify player ready with device ID:', device_id);
+        deviceIdRef.current = device_id;
+        setPlayerReady(true);
+        setIsLoading(false);
+        
+        // Play the current track once playlist is loaded
+        const tracks = playlistTracks.length ? playlistTracks : defaultTracks;
+        playTrack(tracks[currentTrackIndex].spotifyId, token, device_id);
+      });
+
+      // Not Ready
+      player.addListener('not_ready', ({ device_id }) => {
+        console.log('Device ID has gone offline', device_id);
+        setPlayerReady(false);
+      });
+
+      // Connect to the player
+      player.connect();
+      playerRef.current = player;
+
+      return () => {
+        player.disconnect();
+      };
+    } catch (error) {
+      console.error("Error initializing Spotify player:", error);
+      setIsLoading(false);
+      fallbackToLocalAudio();
+    }
+  };
+
+  // Play a specific track
+  const playTrack = async (trackId, token, deviceId) => {
+    if (!token || !deviceId) {
+      console.error("Missing token or device ID");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+        method: 'PUT',
+        body: JSON.stringify({ uris: [`spotify:track:${trackId}`] }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+      });
+    } catch (error) {
+      console.error("Error playing track:", error);
+      setIsLoading(false);
+    }
+  };
+
+  // Fallback to local audio if Spotify fails
+  const fallbackToLocalAudio = () => {
+    console.log("Falling back to local audio or CDN");
+    
+    // Create audio element
+    const audio = new Audio();
+    
+    // Check if local files exist
     const checkLocalFiles = async () => {
       try {
         // Try to fetch the first local file to see if it exists
-        const response = await fetch(musicTracks[0].localPath, { method: 'HEAD' });
+        const localPath = `/music/${defaultTracks[currentTrackIndex].title.replace(/\s+/g, '-')}.mp3`;
+        const response = await fetch(localPath, { method: 'HEAD' });
         if (response.ok) {
-          setUseLocalFiles(true);
+          audio.src = localPath;
+          return true;
         }
+        return false;
       } catch (error) {
-        console.log("Local files not available, using CDN instead");
-        setUseLocalFiles(false);
+        console.log("Local files not available");
+        return false;
       }
     };
-
-    checkLocalFiles();
-  }, []);
-
-  // Get the appropriate path based on availability
-  const getTrackPath = (track) => {
-    return useLocalFiles ? track.localPath : track.cdnPath;
-  };
-
-  // Set random track on initial load
-  useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * musicTracks.length);
-    setCurrentTrackIndex(randomIndex);
-  }, []);
-
-  // Initialize audio player
-  useEffect(() => {
-    setIsLoading(true);
-    const audio = new Audio(getTrackPath(musicTracks[currentTrackIndex]));
-    audio.volume = volume / 100;
-    audio.loop = false;
     
-    // Set up event listeners
-    audio.addEventListener('loadedmetadata', () => {
-      setDuration(audio.duration);
-      setIsLoading(false);
-    });
-    
-    audio.addEventListener('timeupdate', () => {
-      setCurrentTime(audio.currentTime);
-    });
-    
-    audio.addEventListener('ended', () => {
-      playNextTrack();
-    });
-    
-    audio.addEventListener('error', (e) => {
-      console.error("Audio error:", e);
-      setIsLoading(false);
+    // Try to use local files first, then CDN
+    checkLocalFiles().then(hasLocalFiles => {
+      if (!hasLocalFiles) {
+        // Use CDN path based on track title
+        const cdnPath = `https://cdn.chosic.com/free-music/tracks/${defaultTracks[currentTrackIndex].title.replace(/\s+/g, '-')}.mp3`;
+        audio.src = cdnPath;
+      }
       
-      // If local file fails, try CDN version
-      if (useLocalFiles) {
-        setUseLocalFiles(false);
-        const cdnAudio = new Audio(musicTracks[currentTrackIndex].cdnPath);
-        cdnAudio.volume = volume / 100;
-        audioRef.current = cdnAudio;
-        
-        cdnAudio.play().catch(error => {
-          console.log("Playback prevented:", error);
-          playNextTrack(); // If CDN also fails, try next track
-        });
-      } else {
-        playNextTrack(); // Try next track if current one fails
-      }
-    });
-    
-    // Save reference to audio element
-    audioRef.current = audio;
-    
-    // Auto play if isPlaying is true
-    if (isPlaying) {
-      audio.play()
-        .catch(error => {
-          console.log("Auto-play prevented by browser:", error);
-          setIsPlaying(false);
-        });
-    }
-    
-    // Cleanup function
-    return () => {
-      audio.pause();
-      audio.src = '';
+      // Set up audio element
+      audio.volume = volume / 100;
+      audio.loop = false;
       
-      audio.removeEventListener('loadedmetadata', () => {});
-      audio.removeEventListener('timeupdate', () => {});
-      audio.removeEventListener('ended', () => {});
-      audio.removeEventListener('error', () => {});
+      // Set up event listeners
+      audio.addEventListener('loadedmetadata', () => {
+        setIsLoading(false);
+      });
       
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, [currentTrackIndex, useLocalFiles]);
-
-  // Handle autoplay issues with a user interaction check
-  useEffect(() => {
-    const handleUserInteraction = () => {
-      if (audioRef.current && !isPlaying) {
-        audioRef.current.play()
-          .then(() => {
-            setIsPlaying(true);
-          })
-          .catch((error) => {
-            console.log("Playback prevented by browser:", error);
-          });
-        
-        // Remove event listeners after first interaction
-        document.removeEventListener('click', handleUserInteraction);
-        document.removeEventListener('touchstart', handleUserInteraction);
-        document.removeEventListener('keydown', handleUserInteraction);
-      }
-    };
-
-    // Add event listeners for user interaction
-    document.addEventListener('click', handleUserInteraction);
-    document.addEventListener('touchstart', handleUserInteraction);
-    document.addEventListener('keydown', handleUserInteraction);
-
-    return () => {
-      // Clean up event listeners
-      document.removeEventListener('click', handleUserInteraction);
-      document.removeEventListener('touchstart', handleUserInteraction);
-      document.removeEventListener('keydown', handleUserInteraction);
-    };
-  }, [isPlaying]);
-
-  // Update volume when it changes
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume / 100;
-    }
-  }, [volume]);
-
-  // Update play/pause state
-  useEffect(() => {
-    if (audioRef.current) {
+      audio.addEventListener('ended', () => {
+        playNextTrack();
+      });
+      
+      audio.addEventListener('error', () => {
+        console.error("Audio error, trying next track");
+        setIsLoading(false);
+        playNextTrack();
+      });
+      
+      // Play audio
       if (isPlaying) {
-        audioRef.current.play()
+        audio.play()
           .catch(error => {
             console.log("Playback prevented by browser:", error);
             setIsPlaying(false);
           });
-        animationRef.current = requestAnimationFrame(whilePlaying);
-      } else {
-        audioRef.current.pause();
-        cancelAnimationFrame(animationRef.current);
       }
-    }
-  }, [isPlaying]);
+      
+      // Save reference
+      playerRef.current = {
+        togglePlay: () => {
+          if (audio.paused) {
+            audio.play();
+            setIsPlaying(true);
+          } else {
+            audio.pause();
+            setIsPlaying(false);
+          }
+        },
+        setVolume: (vol) => {
+          audio.volume = vol;
+        }
+      };
+    });
+  };
 
+  // Mock function to get a Spotify token
+  // In a real app, you would get this from your backend
+  const getSpotifyToken = async () => {
+    // For demo purposes only
+    // In production, NEVER expose your client secret in frontend code
+    // Instead, make a request to your backend which securely handles authentication
+    
+    // This is a placeholder. You need to implement a proper token retrieval
+    // from your secure backend endpoint
+    try {
+      // Simulating a backend call
+      // Replace with actual fetch to your backend endpoint
+      const response = await fetch('/api/spotify-token');
+      const data = await response.json();
+      return data.token;
+    } catch (error) {
+      console.error("Error getting Spotify token:", error);
+      // For demo, return the token from the example
+      // IMPORTANT: This is NOT secure and should NOT be used in production
+      return 'BQCfWcsQiIS2NeONWcGmNk67T2cPItBegDDPpOXwHJ_rdjqKcGwVuLo04aVJ9NoQe8dWXOMcMfHkSO5FP1gJftfwwC7xOmA-IvbWGa7hBB9ungkAbj_8Vzf2jm2pkiLkSlt5h-eEh3YyV9TcKr8CwfOjlirByHIWSE8ZSb68qR74F_ikxdgjzAwVjLbvMbK-EmPXVc1BtbzU-wVHdECpdYHd2p2n5N9IlUIp_6MvzxJb1NYSLxiFsKMTnFdlExsx80ulgsjBcaXrm-8P1VEXfw7wLKujzrycOJIV5vpyQpkTz7k1oANrRwvB3xJ1fmby';
+    }
+  };
+
+  // Toggle play/pause
   const togglePlay = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const toggleMute = () => {
-    if (!audioRef.current) return;
-    
-    if (isMuted) {
-      audioRef.current.muted = false;
-    } else {
-      audioRef.current.muted = true;
+    if (playerRef.current) {
+      playerRef.current.togglePlay();
     }
-    
-    setIsMuted(!isMuted);
   };
 
+  // Toggle mute
+  const toggleMute = () => {
+    if (playerRef.current) {
+      if (isMuted) {
+        playerRef.current.setVolume(volume / 100);
+      } else {
+        playerRef.current.setVolume(0);
+      }
+      setIsMuted(!isMuted);
+    }
+  };
+
+  // Play next track
   const playNextTrack = () => {
-    setCurrentTrackIndex((prevIndex) => 
-      prevIndex === musicTracks.length - 1 ? 0 : prevIndex + 1
-    );
+    const tracks = playlistTracks.length ? playlistTracks : defaultTracks;
+    const nextIndex = (currentTrackIndex + 1) % tracks.length;
+    setCurrentTrackIndex(nextIndex);
+    
+    if (playerReady && deviceIdRef.current && spotifyToken) {
+      playTrack(tracks[nextIndex].spotifyId, spotifyToken, deviceIdRef.current);
+    }
   };
 
+  // Play previous track
   const playPrevTrack = () => {
-    setCurrentTrackIndex((prevIndex) => 
-      prevIndex === 0 ? musicTracks.length - 1 : prevIndex - 1
-    );
+    const tracks = playlistTracks.length ? playlistTracks : defaultTracks;
+    const prevIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
+    setCurrentTrackIndex(prevIndex);
+    
+    if (playerReady && deviceIdRef.current && spotifyToken) {
+      playTrack(tracks[prevIndex].spotifyId, spotifyToken, deviceIdRef.current);
+    }
   };
 
+  // Handle volume change
   const handleVolumeChange = (e) => {
     const newVolume = parseInt(e.target.value, 10);
     setVolume(newVolume);
     
-    if (audioRef.current) {
-      audioRef.current.volume = newVolume / 100;
+    if (playerRef.current) {
+      playerRef.current.setVolume(newVolume / 100);
     }
     
     // If volume is set to 0, mute the player
     if (newVolume === 0 && !isMuted) {
       setIsMuted(true);
-      if (audioRef.current) audioRef.current.muted = true;
     } 
     // If volume is increased from 0, unmute the player
     else if (newVolume > 0 && isMuted) {
       setIsMuted(false);
-      if (audioRef.current) audioRef.current.muted = false;
     }
   };
 
-  const whilePlaying = () => {
-    if (audioRef.current) {
-      setCurrentTime(audioRef.current.currentTime);
-      animationRef.current = requestAnimationFrame(whilePlaying);
-    }
-  };
-
-  // Format time in MM:SS
-  const formatTime = (time) => {
-    if (isNaN(time)) return "00:00";
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  // Get current track info
+  const getCurrentTrack = () => {
+    const tracks = playlistTracks.length ? playlistTracks : defaultTracks;
+    return tracks[currentTrackIndex] || { title: "Loading...", artist: "" };
   };
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
       {/* Track info (conditionally shown) */}
       <div className="bg-black/30 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 text-white/70 text-sm">
-        {isLoading ? "Loading..." : `${musicTracks[currentTrackIndex].title} - ${musicTracks[currentTrackIndex].artist}`}
-        {useLocalFiles && <span className="ml-2 text-xs text-green-400">(Local)</span>}
+        {isLoading ? "Loading..." : `${getCurrentTrack().title} - ${getCurrentTrack().artist}`}
+        {playerReady && <span className="ml-2 text-xs text-green-400">(Spotify)</span>}
       </div>
       
       {/* Controls */}
