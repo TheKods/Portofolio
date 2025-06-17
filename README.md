@@ -14,7 +14,7 @@ A modern, responsive portfolio website showcasing my skills, projects, and profe
 - **Project Showcase**: Gallery of completed projects with detailed information
 - **Certificate Display**: Organized display of professional certifications and achievements
 - **Contact Form**: Easy way for potential employers and collaborators to reach out
-- **Background Music**: Ambient music for an enhanced browsing experience
+- **Background Music**: Local ambient music for an enhanced browsing experience
 - **Animated Background**: Dynamic visual elements using Three.js and custom shaders
 - **SEO Optimized**: Structured data, meta tags, and performance optimizations
 - **Responsive Design**: Fully responsive across all device sizes
@@ -25,6 +25,7 @@ A modern, responsive portfolio website showcasing my skills, projects, and profe
 - **UI Components**: Material UI, Framer Motion, Headless UI
 - **3D & Animations**: Three.js, React Three Fiber, GSAP, AOS (Animate on Scroll)
 - **Icons & Graphics**: Lucide React, React Icons, LottieFiles
+- **Audio**: HTML5 Audio API for local background music
 - **Type Safety**: TypeScript integration
 - **Performance**: Optimized with React best practices
 - **Deployment**: Vercel with Analytics
@@ -35,11 +36,13 @@ A modern, responsive portfolio website showcasing my skills, projects, and profe
 ```
 Portofolio/
 ├── public/              # Static assets, icons, and media
+│   ├── music/           # Local background music files
 ├── src/
 │   ├── assets/          # Local assets
 │   ├── components/      # Reusable UI components
 │   │   ├── 3D elements  # Three.js components
 │   │   ├── UI elements  # Interface components
+│   │   ├── AudioPlayer  # Local music player component
 │   ├── data/            # Local data files
 │   ├── Pages/           # Main page components
 │   ├── App.jsx          # Main application component
@@ -96,6 +99,31 @@ npm run deploy
 npm run deploy:preview
 ```
 
+## ⚡ Optimization
+
+This project includes several optimizations to improve performance and development experience:
+
+### Cleaning Up
+
+```bash
+# Remove node_modules, dist folders and other build artifacts
+npm run clean
+```
+
+### Build Optimization
+
+The build process includes:
+- Image optimization for reduced file sizes
+- Code splitting for faster loading
+- Tree shaking to remove unused code
+- Minification and compression
+
+### Development Optimization
+
+- Fast refresh for quick development iterations
+- Optimized dependencies to reduce bundle size
+- Efficient asset loading
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
@@ -103,3 +131,12 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## 📞 Contact
 
 Rafi Hermawan - [LinkedIn Profile](https://www.linkedin.com/in/rafi-hermawan/) | [GitHub](https://github.com/TheKods) | [Email](mailto:rafihermawan06@gmail.com)
+
+## 🎵 Background Music
+
+The portfolio includes local background music for an enhanced user experience:
+
+- All music files are stored locally in the `public/music` folder
+- Music player uses HTML5 Audio API instead of YouTube API for better performance
+- Tracks are royalty-free with proper attribution in `public/music/CREDITS.md`
+- User controls include play/pause, next/previous track, and volume adjustment

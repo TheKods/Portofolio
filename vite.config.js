@@ -1,22 +1,56 @@
 import { defineConfig } from 'vite'
-import reactSwc from '@vitejs/plugin-react-swc'
+import react from '@vitejs/plugin-react'
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [reactSwc()],
+  plugins: [
+    react(),
+    ViteImageOptimizer({
+      png: {
+        quality: 80,
+      },
+      jpg: {
+        quality: 80,
+      },
+      jpeg: {
+        quality: 80,
+      },
+      webp: {
+        lossless: true,
+      },
+      gif: {
+        optimizationLevel: 3,
+      },
+      svg: {
+        multipass: true,
+        plugins: [
+          {
+            name: 'preset-default',
+            params: {
+              overrides: {
+                removeViewBox: false,
+              },
+            },
+          },
+        ],
+      },
+    }),
+  ],
   build: {
     minify: 'terser',
     terserOptions: {
       compress: {
         drop_console: true,
+        drop_debugger: true,
       },
     },
     rollupOptions: {
       output: {
         manualChunks: {
-          'react-vendor': ['react', 'react-dom'],
-          'mui-vendor': ['@mui/material', '@mui/icons-material'],
-          'animation-vendor': ['aos', 'framer-motion'],
+          react: ['react', 'react-dom'],
+          three: ['three'],
+          vendor: ['@react-three/drei', '@react-three/fiber'],
         },
       },
     },
