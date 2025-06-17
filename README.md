@@ -1,38 +1,45 @@
 # Rafi Hermawan - Portfolio Website
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com)
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://rafi-hermawan.vercel.app/)
 [![Built with Vite](https://img.shields.io/badge/Built%20with-Vite-646CFF?style=for-the-badge&logo=vite)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactjs.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-A modern, responsive portfolio website showcasing my skills, projects, and professional experience in cloud computing and software development.
+A modern, responsive portfolio website showcasing my skills, projects, and professional experience in cloud computing and backend development.
 
 ## 🌟 Features
 
-- **Modern UI/UX**: Clean, responsive design with smooth animations
-- **Interactive Tech Stack**: Visual representation of technical skills
-- **Project Showcase**: Gallery of completed projects with details
-- **Certificate Display**: Organized display of professional certifications
-- **Contact Form**: Easy way for potential employers to reach out
-- **Background Music**: Ambient lofi music for a pleasant browsing experience
-- **Animated Background**: Dynamic visual elements for an engaging user experience
+- **Modern UI/UX**: Clean, responsive design with smooth animations and transitions
+- **Interactive Tech Stack**: Visual representation of technical skills and expertise
+- **Project Showcase**: Gallery of completed projects with detailed information
+- **Certificate Display**: Organized display of professional certifications and achievements
+- **Contact Form**: Easy way for potential employers and collaborators to reach out
+- **Background Music**: Ambient music for an enhanced browsing experience
+- **Animated Background**: Dynamic visual elements using Three.js and custom shaders
+- **SEO Optimized**: Structured data, meta tags, and performance optimizations
+- **Responsive Design**: Fully responsive across all device sizes
 
 ## 🚀 Technologies Used
 
-- **Frontend**: React, Vite, Tailwind CSS
-- **UI Components**: Material UI, Lucide React icons
-- **Animations**: AOS (Animate on Scroll), Custom animations
-- **Media**: YouTube iframe API for background music
-- **Deployment**: Vercel
+- **Frontend**: React 18, Vite 6, Tailwind CSS 3
+- **UI Components**: Material UI, Framer Motion, Headless UI
+- **3D & Animations**: Three.js, React Three Fiber, GSAP, AOS (Animate on Scroll)
+- **Icons & Graphics**: Lucide React, React Icons, LottieFiles
+- **Type Safety**: TypeScript integration
+- **Performance**: Optimized with React best practices
+- **Deployment**: Vercel with Analytics
+- **SEO**: React Helmet Async, JSON-LD structured data
 
 ## 📋 Project Structure
 
 ```
-My_porto/
-├── public/              # Static assets and icons
+Portofolio/
+├── public/              # Static assets, icons, and media
 ├── src/
 │   ├── assets/          # Local assets
 │   ├── components/      # Reusable UI components
+│   │   ├── 3D elements  # Three.js components
+│   │   ├── UI elements  # Interface components
 │   ├── data/            # Local data files
 │   ├── Pages/           # Main page components
 │   ├── App.jsx          # Main application component
@@ -40,6 +47,7 @@ My_porto/
 ├── .gitignore           # Git ignore file
 ├── package.json         # Project dependencies
 ├── tailwind.config.js   # Tailwind CSS configuration
+├── tsconfig.json        # TypeScript configuration
 └── vite.config.js       # Vite configuration
 ```
 
@@ -47,15 +55,15 @@ My_porto/
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
+- Node.js (v16 or higher)
 - npm or yarn
 
 ### Installation
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
-   cd My_porto
+   git clone https://github.com/TheKods/portfolio.git
+   cd portfolio
    ```
 
 2. Install dependencies:
@@ -78,10 +86,20 @@ This project is configured for seamless deployment on Vercel:
 2. Connect the repository to Vercel
 3. Vercel will automatically build and deploy your site
 
+### Manual Deployment
+
+```bash
+# Deploy to production
+npm run deploy
+
+# Deploy preview
+npm run deploy:preview
+```
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## 📞 Contact
 
-Rafi Hermawan - [LinkedIn Profile](https://www.linkedin.com/in/your-linkedin)
+Rafi Hermawan - [LinkedIn Profile](https://www.linkedin.com/in/rafi-hermawan/) | [GitHub](https://github.com/TheKods) | [Email](mailto:rafihermawan06@gmail.com)
