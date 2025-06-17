@@ -35,6 +35,10 @@ export default defineConfig({
           },
         ],
       },
+      logStats: true,
+      ansiColors: true,
+      silent: false,
+      strict: false,
     }),
   ],
   build: {
@@ -58,6 +62,6 @@ export default defineConfig({
     chunkSizeWarningLimit: 1600,
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', '@mui/material', 'aos'],
+    include: ['react', 'react-dom', '@mui/material', 'aos', 'svgo', 'sharp'],
   },
 })
