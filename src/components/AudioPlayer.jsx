@@ -10,33 +10,61 @@ const AudioPlayer = () => {
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [useLocalFiles, setUseLocalFiles] = useState(false);
   
   const audioRef = useRef(null);
   const animationRef = useRef(null);
 
-  // List of music tracks from CDN
+  // Music track definitions
   const musicTracks = [
     { 
       title: "Colorful Flowers",
-      path: "https://cdn.chosic.com/free-music/tracks/Colorful-Flowers(chosic.com).mp3",
+      localPath: "/music/Colorful-Flowers(chosic.com).mp3",
+      cdnPath: "https://cdn.chosic.com/free-music/tracks/Colorful-Flowers(chosic.com).mp3",
       artist: "Tokyo Music Walker"
     },
     { 
       title: "Echoes In Blue",
-      path: "https://cdn.chosic.com/free-music/tracks/echoes-in-blue-by-tokyo-music-walker-chosic.com_.mp3",
+      localPath: "/music/echoes-in-blue-by-tokyo-music-walker-chosic.com_.mp3",
+      cdnPath: "https://cdn.chosic.com/free-music/tracks/echoes-in-blue-by-tokyo-music-walker-chosic.com_.mp3",
       artist: "Tokyo Music Walker"
     },
     { 
       title: "Memories of Spring",
-      path: "https://cdn.chosic.com/free-music/tracks/Memories-of-Spring(chosic.com).mp3",
+      localPath: "/music/Memories-of-Spring(chosic.com).mp3",
+      cdnPath: "https://cdn.chosic.com/free-music/tracks/Memories-of-Spring(chosic.com).mp3",
       artist: "Tokyo Music Walker"
     },
     { 
       title: "Transcendence",
-      path: "https://cdn.chosic.com/free-music/tracks/Transcendence-chosic.com_.mp3",
+      localPath: "/music/Transcendence-chosic.com_.mp3",
+      cdnPath: "https://cdn.chosic.com/free-music/tracks/Transcendence-chosic.com_.mp3",
       artist: "Alexander Nakarada"
     }
   ];
+
+  // Check if local files exist
+  useEffect(() => {
+    const checkLocalFiles = async () => {
+      try {
+        // Try to fetch the first local file to see if it exists
+        const response = await fetch(musicTracks[0].localPath, { method: 'HEAD' });
+        if (response.ok) {
+          setUseLocalFiles(true);
+        }
+      } catch (error) {
+        console.log("Local files not available, using CDN instead");
+        setUseLocalFiles(false);
+      }
+    };
+
+    checkLocalFiles();
+  }, []);
+
+  // Get the appropriate path based on availability
+  const getTrackPath = (track) => {
+    return useLocalFiles ? track.localPath : track.cdnPath;
+  };
 
   // Set random track on initial load
   useEffect(() => {
@@ -47,7 +75,7 @@ const AudioPlayer = () => {
   // Initialize audio player
   useEffect(() => {
     setIsLoading(true);
-    const audio = new Audio(musicTracks[currentTrackIndex].path);
+    const audio = new Audio(getTrackPath(musicTracks[currentTrackIndex]));
     audio.volume = volume / 100;
     audio.loop = false;
     
@@ -68,7 +96,21 @@ const AudioPlayer = () => {
     audio.addEventListener('error', (e) => {
       console.error("Audio error:", e);
       setIsLoading(false);
-      playNextTrack(); // Try next track if current one fails
+      
+      // If local file fails, try CDN version
+      if (useLocalFiles) {
+        setUseLocalFiles(false);
+        const cdnAudio = new Audio(musicTracks[currentTrackIndex].cdnPath);
+        cdnAudio.volume = volume / 100;
+        audioRef.current = cdnAudio;
+        
+        cdnAudio.play().catch(error => {
+          console.log("Playback prevented:", error);
+          playNextTrack(); // If CDN also fails, try next track
+        });
+      } else {
+        playNextTrack(); // Try next track if current one fails
+      }
     });
     
     // Save reference to audio element
@@ -97,7 +139,7 @@ const AudioPlayer = () => {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [currentTrackIndex]);
+  }, [currentTrackIndex, useLocalFiles]);
 
   // Handle autoplay issues with a user interaction check
   useEffect(() => {
@@ -223,6 +265,7 @@ const AudioPlayer = () => {
       {/* Track info (conditionally shown) */}
       <div className="bg-black/30 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 text-white/70 text-sm">
         {isLoading ? "Loading..." : `${musicTracks[currentTrackIndex].title} - ${musicTracks[currentTrackIndex].artist}`}
+        {useLocalFiles && <span className="ml-2 text-xs text-green-400">(Local)</span>}
       </div>
       
       {/* Controls */}

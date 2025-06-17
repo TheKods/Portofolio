@@ -136,14 +136,22 @@ Rafi Hermawan - [LinkedIn Profile](https://www.linkedin.com/in/rafi-hermawan/) |
 
 The portfolio includes background music for an enhanced user experience:
 
-- Music is streamed from CDN (Content Delivery Network) for better performance and to avoid large file storage
+- Music player automatically detects if local music files are available, otherwise uses CDN
+- Music files are included in the repository for a complete deployment experience
 - Music player uses HTML5 Audio API for efficient playback
 - Tracks are royalty-free with proper attribution in `public/music/CREDITS.md`
 - User controls include play/pause, next/previous track, and volume adjustment
-- Fallback mechanism automatically tries the next track if one fails to load
+- Fallback mechanism automatically tries CDN if local files fail to load
 
-### Alternative Local Setup
-If you prefer to use local music files:
-1. Download lofi music tracks from sources like [Chosic](https://www.chosic.com/free-music/lofi/)
-2. Place them in the `public/music` folder
-3. Update the paths in `src/components/AudioPlayer.jsx` to use local paths
+### Music Configuration Options
+
+The audio player is designed to work in multiple environments:
+
+1. **Local Development with Local Files**: Uses music files from `/public/music/` folder
+2. **Production with Local Files**: Uses the same local files that are committed to the repository
+3. **Fallback to CDN**: Automatically switches to CDN if local files are not available or fail to load
+
+To exclude large music files from your Git repository, uncomment the relevant line in `.gitignore`:
+```
+# public/music/*.mp3
+```
