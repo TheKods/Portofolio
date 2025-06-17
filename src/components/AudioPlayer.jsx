@@ -9,30 +9,31 @@ const AudioPlayer = () => {
   const [showVolumeSlider, setShowVolumeSlider] = useState(true);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   
   const audioRef = useRef(null);
   const animationRef = useRef(null);
 
-  // List of local music tracks
+  // List of music tracks from CDN
   const musicTracks = [
     { 
       title: "Colorful Flowers",
-      path: "/music/Colorful-Flowers(chosic.com).mp3",
+      path: "https://cdn.chosic.com/free-music/tracks/Colorful-Flowers(chosic.com).mp3",
       artist: "Tokyo Music Walker"
     },
     { 
       title: "Echoes In Blue",
-      path: "/music/echoes-in-blue-by-tokyo-music-walker-chosic.com_.mp3",
+      path: "https://cdn.chosic.com/free-music/tracks/echoes-in-blue-by-tokyo-music-walker-chosic.com_.mp3",
       artist: "Tokyo Music Walker"
     },
     { 
       title: "Memories of Spring",
-      path: "/music/Memories-of-Spring(chosic.com).mp3",
+      path: "https://cdn.chosic.com/free-music/tracks/Memories-of-Spring(chosic.com).mp3",
       artist: "Tokyo Music Walker"
     },
     { 
       title: "Transcendence",
-      path: "/music/Transcendence-chosic.com_.mp3",
+      path: "https://cdn.chosic.com/free-music/tracks/Transcendence-chosic.com_.mp3",
       artist: "Alexander Nakarada"
     }
   ];
@@ -45,6 +46,7 @@ const AudioPlayer = () => {
 
   // Initialize audio player
   useEffect(() => {
+    setIsLoading(true);
     const audio = new Audio(musicTracks[currentTrackIndex].path);
     audio.volume = volume / 100;
     audio.loop = false;
@@ -52,6 +54,7 @@ const AudioPlayer = () => {
     // Set up event listeners
     audio.addEventListener('loadedmetadata', () => {
       setDuration(audio.duration);
+      setIsLoading(false);
     });
     
     audio.addEventListener('timeupdate', () => {
@@ -60,6 +63,12 @@ const AudioPlayer = () => {
     
     audio.addEventListener('ended', () => {
       playNextTrack();
+    });
+    
+    audio.addEventListener('error', (e) => {
+      console.error("Audio error:", e);
+      setIsLoading(false);
+      playNextTrack(); // Try next track if current one fails
     });
     
     // Save reference to audio element
@@ -82,6 +91,7 @@ const AudioPlayer = () => {
       audio.removeEventListener('loadedmetadata', () => {});
       audio.removeEventListener('timeupdate', () => {});
       audio.removeEventListener('ended', () => {});
+      audio.removeEventListener('error', () => {});
       
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
@@ -212,7 +222,7 @@ const AudioPlayer = () => {
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
       {/* Track info (conditionally shown) */}
       <div className="bg-black/30 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 text-white/70 text-sm">
-        {musicTracks[currentTrackIndex].title} - {musicTracks[currentTrackIndex].artist}
+        {isLoading ? "Loading..." : `${musicTracks[currentTrackIndex].title} - ${musicTracks[currentTrackIndex].artist}`}
       </div>
       
       {/* Controls */}

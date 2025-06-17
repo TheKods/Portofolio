@@ -134,9 +134,16 @@ Rafi Hermawan - [LinkedIn Profile](https://www.linkedin.com/in/rafi-hermawan/) |
 
 ## 🎵 Background Music
 
-The portfolio includes local background music for an enhanced user experience:
+The portfolio includes background music for an enhanced user experience:
 
-- All music files are stored locally in the `public/music` folder
-- Music player uses HTML5 Audio API instead of YouTube API for better performance
+- Music is streamed from CDN (Content Delivery Network) for better performance and to avoid large file storage
+- Music player uses HTML5 Audio API for efficient playback
 - Tracks are royalty-free with proper attribution in `public/music/CREDITS.md`
 - User controls include play/pause, next/previous track, and volume adjustment
+- Fallback mechanism automatically tries the next track if one fails to load
+
+### Alternative Local Setup
+If you prefer to use local music files:
+1. Download lofi music tracks from sources like [Chosic](https://www.chosic.com/free-music/lofi/)
+2. Place them in the `public/music` folder
+3. Update the paths in `src/components/AudioPlayer.jsx` to use local paths

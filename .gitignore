@@ -96,3 +96,6 @@ temp
 
 .sertif
 .vercel
+
+# Large music files
+public/music/*.mp3
