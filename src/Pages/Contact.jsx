@@ -1,11 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { Share2, User, Mail, MessageSquare, Send } from "lucide-react";
 import { Link } from "react-router-dom";
-import SocialLinks from "../components/SocialLinks";
-import Komentar from "../components/Commentar";
 import Swal from "sweetalert2";
 import AOS from "aos";
 import "aos/dist/aos.css";
+
+const SocialLinksInline = () => (
+  <div className="flex items-center gap-4 text-slate-300 text-sm">
+    <a
+      href="https://github.com/TheKods"
+      target="_blank"
+      rel="noreferrer"
+      className="hover:text-white"
+    >
+      GitHub
+    </a>
+    <a
+      href="https://www.linkedin.com/in/rafi-hermawan/"
+      target="_blank"
+      rel="noreferrer"
+      className="hover:text-white"
+    >
+      LinkedIn
+    </a>
+    <a href="mailto:rafihermawan06@gmail.com" className="hover:text-white">
+      Email
+    </a>
+  </div>
+);
+
+const CommentsPlaceholder = () => (
+  <div className="text-slate-300 text-sm">
+    Comments section will be redesigned.
+  </div>
+);
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -34,33 +62,28 @@ const ContactPage = () => {
     setIsSubmitting(true);
 
     Swal.fire({
-      title: 'Sending Message...',
-      html: 'Please wait while we send your message',
+      title: "Sending Message...",
+      html: "Please wait while we send your message",
       allowOutsideClick: false,
       didOpen: () => {
         Swal.showLoading();
-      }
+      },
     });
 
     try {
-      // Get form data
       const form = e.target;
       const formData = new FormData(form);
-
-      // Submit form
       await form.submit();
 
-      // Show success message
       Swal.fire({
-        title: 'Success!',
-        text: 'Your message has been sent successfully!',
-        icon: 'success',
-        confirmButtonColor: '#6366f1',
+        title: "Success!",
+        text: "Your message has been sent successfully!",
+        icon: "success",
+        confirmButtonColor: "#6366f1",
         timer: 2000,
-        timerProgressBar: true
+        timerProgressBar: true,
       });
 
-      // Reset form
       setFormData({
         name: "",
         email: "",
@@ -68,10 +91,10 @@ const ContactPage = () => {
       });
     } catch (error) {
       Swal.fire({
-        title: 'Error!',
-        text: 'Something went wrong. Please try again later.',
-        icon: 'error',
-        confirmButtonColor: '#6366f1'
+        title: "Error!",
+        text: "Something went wrong. Please try again later.",
+        icon: "error",
+        confirmButtonColor: "#6366f1",
       });
     } finally {
       setIsSubmitting(false);
@@ -112,11 +135,8 @@ const ContactPage = () => {
         className="h-auto py-10 flex items-center justify-center px-[5%] md:px-0"
         id="Contact"
       >
-        <div className="container px-[1%] grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-[45%_55%] 2xl:grid-cols-[35%_65%] gap-12" >
-          <div
-        
-            className="bg-white/5 backdrop-blur-xl rounded-3xl shadow-2xl p-5 py-10 sm:p-10 transform transition-all duration-500 hover:shadow-[#6366f1]/10"
-          >
+        <div className="container px-[1%] grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-[45%_55%] 2xl:grid-cols-[35%_65%] gap-12">
+          <div className="bg-white/5 backdrop-blur-xl rounded-3xl shadow-2xl p-5 py-10 sm:p-10 transform transition-all duration-500 hover:shadow-[#6366f1]/10">
             <div className="flex justify-between items-start mb-8">
               <div>
                 <h2 className="text-4xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#a855f7]">
@@ -129,7 +149,7 @@ const ContactPage = () => {
               <Share2 className="w-10 h-10 text-[#6366f1] opacity-50" />
             </div>
 
-            <form 
+            <form
               action="https://formsubmit.co/rafihermawan06@gmail.com"
               method="POST"
               onSubmit={handleSubmit}
@@ -197,17 +217,17 @@ const ContactPage = () => {
                 className="w-full bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-white py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-[#6366f1]/20 active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 <Send className="w-5 h-5" />
-                {isSubmitting ? 'Sending...' : 'Send Message'}
+                {isSubmitting ? "Sending..." : "Send Message"}
               </button>
             </form>
 
             <div className="mt-10 pt-6 border-t border-white/10 flex justify-center space-x-6">
-              <SocialLinks />
+              <SocialLinksInline />
             </div>
           </div>
 
           <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-3 py-3 md:p-10 md:py-8 shadow-2xl transform transition-all duration-500 hover:shadow-[#6366f1]/10">
-            <Komentar />
+            <CommentsPlaceholder />
           </div>
         </div>
       </div>

@@ -21,17 +21,11 @@
     "@mui/icons-material": "^6.1.6",
     "@mui/material": "^6.1.6",
     "@mui/styled-engine-sc": "^6.1.6",
-    "@react-spring/web": "^9.7.5",
-    "@react-three/drei": "^9.88.17",
-    "@react-three/fiber": "^8.15.11",
-    "@splinetool/react-spline": "^4.0.0",
-    "@splinetool/runtime": "^1.9.37",
     "aos": "^2.3.4",
     "clsx": "^2.1.1",
     "framer-motion": "^11.18.2",
-    "gsap": "^3.12.5",
     "lucide-react": "^0.454.0",
-    "postprocessing": "^6.33.3",
+    "postprocessing": "6.37.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet-async": "^2.0.5",
@@ -41,13 +35,12 @@
     "styled-components": "^6.1.13",
     "sweetalert2": "^11.10.6",
     "tailwind-merge": "^2.5.5",
-    "three": "^0.157.0",
+    "three": "0.157.0",
     "typewriter-effect": "^2.21.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
-    "@types/three": "^0.157.0",
     "@typescript-eslint/eslint-plugin": "^8.34.1",
     "@typescript-eslint/parser": "^8.34.1",
     "@vercel/analytics": "^1.5.0",
@@ -60,13 +53,10 @@
     "eslint-plugin-react-refresh": "^0.4.14",
     "postcss": "^8.4.47",
     "rimraf": "^5.0.5",
-    "sharp": "^0.33.2",
-    "svgo": "^3.2.0",
     "tailwind-scrollbar": "^3.1.0",
     "tailwindcss": "^3.4.14",
     "terser": "^5.43.0",
     "typescript": "^5.8.3",
-    "vite": "^6.3.5",
-    "vite-plugin-image-optimizer": "^1.1.7"
+    "vite": "^6.3.5"
   }
 }

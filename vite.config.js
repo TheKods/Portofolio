@@ -1,48 +1,11 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    ViteImageOptimizer({
-      png: {
-        quality: 80,
-      },
-      jpg: {
-        quality: 80,
-      },
-      jpeg: {
-        quality: 80,
-      },
-      webp: {
-        lossless: true,
-      },
-      gif: {
-        optimizationLevel: 3,
-      },
-      svg: {
-        multipass: true,
-        plugins: [
-          {
-            name: 'preset-default',
-            params: {
-              overrides: {
-                removeViewBox: false,
-              },
-            },
-          },
-        ],
-      },
-      logStats: true,
-      ansiColors: true,
-      silent: false,
-      strict: false,
-    }),
-  ],
+  plugins: [react()],
   build: {
-    minify: 'terser',
+    minify: "terser",
     terserOptions: {
       compress: {
         drop_console: true,
@@ -52,9 +15,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          react: ['react', 'react-dom'],
-          three: ['three'],
-          vendor: ['@react-three/drei', '@react-three/fiber'],
+          react: ["react", "react-dom"],
         },
       },
     },
@@ -62,6 +23,6 @@ export default defineConfig({
     chunkSizeWarningLimit: 1600,
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', '@mui/material', 'aos', 'svgo', 'sharp'],
+    include: ["react", "react-dom", "@mui/material", "aos"],
   },
-})
+});
