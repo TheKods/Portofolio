@@ -1,15 +1,15 @@
-/*
-	Installed from https://reactbits.dev/default/
-*/
-
+/* Fullscreen, aman di semua parent */
 #lights {
-  width: 100%;
-  height: 100%;
+  position: fixed; /* atau absolute kalau memang butuh menempel pada parent tertentu */
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
-  position: absolute;
+  z-index: 0; /* atur sesuai layout kamu */
 }
 
 canvas {
+  display: block; /* hilangkan inline-gap */
   width: 100%;
   height: 100%;
 }

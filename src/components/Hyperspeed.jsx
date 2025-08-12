@@ -8,7 +8,7 @@ import {
   SMAAEffect,
   SMAAPreset,
 } from "postprocessing";
-
+import "./Hyperspeed.css";
 const Hyperspeed = ({
   effectOptions = {
     onSpeedUp: () => {},
