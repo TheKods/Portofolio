@@ -52,7 +52,7 @@ export const certificates = [
     issuer: "Dicoding Indonesia",
     date: "May 2024",
     img: "/Sertif/Menjadi Google Cloud Engineer.jpg",
-    link: "dicoding.com/certificates/1OP8W1Y4VXQK"
+    link: "https://dicoding.com/certificates/1OP8W1Y4VXQK"
   },
   {
     id: "4",
@@ -60,7 +60,7 @@ export const certificates = [
     issuer: "Dicoding Indonesia",
     date: "April 2024",
     img: "/Sertif/Belajar Dasar Pemrograman JavaScript.jpg",
-    link: "dicoding.com/certificates/MEPJNE9Q6X3V"
+    link: "https://dicoding.com/certificates/MEPJNE9Q6X3V"
   },
   {
     id: "5",
@@ -68,7 +68,7 @@ export const certificates = [
     issuer: "Dicoding Indonesia",
     date: "May 2024",
     img: "/Sertif/Belajar Membuat Aplikasi Back-End untuk Pemula dengan.jpg",
-    link: "dicoding.com/certificates/N9ZOM464RPG5"
+    link: "https://dicoding.com/certificates/N9ZOM464RPG5"
   },
   {
     id: "6",
@@ -116,7 +116,7 @@ export const certificates = [
     issuer: "Dicoding Indonesia",
     date: "February 2024",
     img: "/Sertif/Belajar Dasar Git dengan GitHub.jpg",
-    link: "dicoding.com/certificates/1RXY1D9W1PVM"
+    link: "https://dicoding.com/certificates/1RXY1D9W1PVM"
   },
   {
     id: "12",
@@ -124,7 +124,7 @@ export const certificates = [
     issuer: "Dicoding Indonesia",
     date: "March 2024",
     img: "/Sertif/Belajar Dasar Pemrograman Web.jpg",
-    link: "dicoding.com/certificates/N9ZOO166YZG5"
+    link: "https://dicoding.com/certificates/N9ZOO166YZG5"
   },
   {
     id: "13",
@@ -132,7 +132,7 @@ export const certificates = [
     issuer: "Dicoding Indonesia",
     date: "February 2024",
     img: "/Sertif/Memulai Dasar Pemrograman untuk Menjadi Pengembang.jpg",
-    link: "dicoding.com/certificates/KEXL8MDWMZG2"
+    link: "https://dicoding.com/certificates/KEXL8MDWMZG2"
   },
   {
     id: "14",
@@ -140,7 +140,7 @@ export const certificates = [
     issuer: "Dicoding Indonesia",
     date: "May 2024",
     img: "/Sertif/Belajar Penerapan Machine Learning dengan Google Cloud.jpg",
-    link: "dicoding.com/certificates/GRX5OQ1E3P0M"
+    link: "https://dicoding.com/certificates/GRX5OQ1E3P0M"
   },
   {
     id: "15",
