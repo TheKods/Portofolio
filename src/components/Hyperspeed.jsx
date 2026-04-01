@@ -47,6 +47,7 @@ const Hyperspeed = ({
       sticks: 0x03b3c3,
     },
   },
+  className = "",
 }) => {
   const hyperspeed = useRef(null);
   const appRef = useRef(null);
@@ -92,7 +93,7 @@ const Hyperspeed = ({
   useEffect(() => {
     if (appRef.current) {
       appRef.current.dispose();
-      const container = document.getElementById("lights");
+      const container = hyperspeed.current;
       if (container) {
         while (container.firstChild)
           container.removeChild(container.firstChild);
@@ -471,8 +472,9 @@ const Hyperspeed = ({
         this.setSize = this.setSize.bind(this);
         this.onMouseDown = this.onMouseDown.bind(this);
         this.onMouseUp = this.onMouseUp.bind(this);
+        this.onWindowResize = this.onWindowResize.bind(this);
 
-        window.addEventListener("resize", this.onWindowResize.bind(this));
+        window.addEventListener("resize", this.onWindowResize);
       }
 
       onWindowResize() {
@@ -625,7 +627,7 @@ const Hyperspeed = ({
         if (this.composer) this.composer.dispose();
         if (this.scene) this.scene.clear();
 
-        window.removeEventListener("resize", this.onWindowResize.bind(this));
+        window.removeEventListener("resize", this.onWindowResize);
         if (this.container) {
           this.container.removeEventListener("mousedown", this.onMouseDown);
           this.container.removeEventListener("mouseup", this.onMouseUp);
@@ -1158,15 +1160,20 @@ const Hyperspeed = ({
       const canvas = renderer.domElement;
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
+      if (width <= 0 || height <= 0) return false;
       const needResize = canvas.width !== width || canvas.height !== height;
       if (needResize) setSize(width, height, false);
       return needResize;
     }
 
     (function () {
-      const container = document.getElementById("lights");
+      const container = hyperspeed.current;
       if (!container) return;
-      const options = { ...DEFAULT_OPTIONS, ...effectOptions };
+      const options = {
+        ...DEFAULT_OPTIONS,
+        ...effectOptions,
+        colors: { ...DEFAULT_OPTIONS.colors, ...(effectOptions?.colors || {}) },
+      };
       options.distortion =
         distortions[options.distortion] ||
         distortions[DEFAULT_OPTIONS.distortion];
@@ -1185,7 +1192,9 @@ const Hyperspeed = ({
     };
   }, [effectOptions]);
 
-  return <div id="lights" className="w-full h-full" ref={hyperspeed}></div>;
+  return (
+    <div className={`hyperspeed w-full h-full ${className}`} ref={hyperspeed} />
+  );
 };
 
 export default Hyperspeed;
