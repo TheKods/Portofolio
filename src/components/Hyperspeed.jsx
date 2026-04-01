@@ -48,6 +48,7 @@ const Hyperspeed = ({
     },
   },
   className = "",
+  fullscreen = false,
 }) => {
   const hyperspeed = useRef(null);
   const appRef = useRef(null);
@@ -1193,7 +1194,10 @@ const Hyperspeed = ({
   }, [effectOptions]);
 
   return (
-    <div className={`hyperspeed w-full h-full ${className}`} ref={hyperspeed} />
+    <div
+      className={`hyperspeed w-full h-full ${fullscreen ? "hyperspeed--fullscreen" : ""} ${className}`}
+      ref={hyperspeed}
+    />
   );
 };
 
