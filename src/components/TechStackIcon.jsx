@@ -12,7 +12,7 @@ import {
   SiGit,
   SiOpenapiinitiative,
   SiPostman,
-  SiYaml,
+  SiYaml
 } from "react-icons/si";
 
 const NAME_TO_ICON = {
