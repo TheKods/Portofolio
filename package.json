@@ -21,6 +21,7 @@
     "@mui/icons-material": "^6.1.6",
     "@mui/material": "^6.1.6",
     "@mui/styled-engine-sc": "^6.1.6",
+    "@vercel/speed-insights": "2.0.0",
     "aos": "^2.3.4",
     "clsx": "^2.1.1",
     "framer-motion": "^11.18.2",
