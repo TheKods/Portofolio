@@ -94,7 +94,7 @@ temp
 *.tar
 *.gz
 
-.sertif
+
 .vercel
 
 # Uncomment the line below if you don't want to commit music files
