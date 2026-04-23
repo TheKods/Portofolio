@@ -35,7 +35,7 @@ const Navbar = () => {
       const active = sections.find(
         (section) =>
           currentPosition >= section.offset &&
-          currentPosition < section.offset + section.height
+          currentPosition < section.offset + section.height,
       );
 
       if (active) {
@@ -84,8 +84,8 @@ const Navbar = () => {
         isOpen
           ? "bg-[#030014]"
           : scrolled
-          ? "bg-[#030014]/50 backdrop-blur-xl"
-          : "bg-transparent"
+            ? "bg-[#030014]/50 backdrop-blur-xl"
+            : "bg-transparent"
       }`}
     >
       <div className="mx-auto px-4 sm:px-6 lg:px-[10%]">
@@ -98,7 +98,7 @@ const Navbar = () => {
               className="text-xl font-bold bg-gradient-to-r from-[#a855f7] to-[#6366f1] bg-clip-text text-transparent"
             >
               <div className="flex items-center gap-2">
-                <span className="text-xl font-bold text-white">Rafi</span>
+                <span className="text-xl font-bold text-white">Welcome</span>
               </div>
             </a>
           </div>
