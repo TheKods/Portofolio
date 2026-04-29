@@ -88,7 +88,7 @@ const Navbar = () => {
           ? "bg-slate-50"
           : scrolled
             ? "bg-slate-50/95 backdrop-blur-md shadow-sm"
-            : "bg-transparent"
+            : "bg-transparent",
       )}
     >
       <div className="max-w-7xl mx-auto px-4 md:px-8">
@@ -101,7 +101,7 @@ const Navbar = () => {
               className={cn(
                 "text-xl font-bold",
                 transitions.default,
-                "text-blue-800 hover:text-blue-900"
+                "text-blue-800 hover:text-blue-900",
               )}
             >
               Rafi Hermawan
@@ -121,7 +121,7 @@ const Navbar = () => {
                     transitions.default,
                     activeSection === item.href.substring(1)
                       ? "text-blue-800"
-                      : "text-slate-600 hover:text-slate-900"
+                      : "text-slate-600 hover:text-slate-900",
                   )}
                 >
                   {item.label}
@@ -140,7 +140,7 @@ const Navbar = () => {
               className={cn(
                 "p-2 text-slate-900",
                 transitions.default,
-                "hover:text-blue-800"
+                "hover:text-blue-800",
               )}
               aria-label="Toggle menu"
             >
@@ -168,7 +168,7 @@ const Navbar = () => {
                   transitions.default,
                   activeSection === item.href.substring(1)
                     ? "bg-blue-50 text-blue-800"
-                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900",
                 )}
               >
                 {item.label}
