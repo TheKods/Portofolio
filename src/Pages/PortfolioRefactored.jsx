@@ -3,19 +3,19 @@ import { Code, Award, Boxes } from "lucide-react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { projects, certificates } from "../data/localData";
-import { useDisclosure } from "./useDisclosure";
+import { useDisclosure } from "../components/useDisclosure";
 import {
   Section,
   Container,
   Grid,
-  Stack,
   Heading,
   Text,
   Button,
   Badge,
   BadgeGroup,
-} from "./ui";
-import { ProjectCard, CertificateCard } from "./ui/ProjectCard";
+  ProjectCard,
+  CertificateCard,
+} from "../components/ui";
 import { cn, transitions } from "../styles/theme";
 
 const TabButton = ({ isActive, icon: Icon, label, onClick }) => (

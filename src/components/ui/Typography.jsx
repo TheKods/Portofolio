@@ -25,6 +25,14 @@ export const Heading = React.forwardRef(
       h6: "text-base md:text-lg font-semibold",
     };
 
+    const colorMap = {
+      "slate-900": "text-slate-900",
+      "slate-800": "text-slate-800",
+      "blue-800": "text-blue-800",
+      "indigo-900": "text-indigo-900",
+      white: "text-white",
+    };
+
     const alignMap = {
       left: "text-left",
       center: "text-center",
@@ -38,7 +46,7 @@ export const Heading = React.forwardRef(
         ref={ref}
         className={cn(
           levelMap[as],
-          `text-${color}`,
+          colorMap[color] || "text-slate-900",
           alignMap[align],
           className,
         )}
@@ -90,6 +98,21 @@ export const Text = React.forwardRef(
       justify: "text-justify",
     };
 
+    const colorMap = {
+      "slate-900": "text-slate-900",
+      "slate-800": "text-slate-800",
+      "slate-600": "text-slate-600",
+      "slate-500": "text-slate-500",
+      "slate-400": "text-slate-400",
+      "blue-800": "text-blue-800",
+      "indigo-900": "text-indigo-900",
+      white: "text-white",
+    };
+
+    const finalColor = muted
+      ? "text-slate-500"
+      : colorMap[color] || "text-slate-600";
+
     return (
       <p
         ref={ref}
@@ -98,7 +121,7 @@ export const Text = React.forwardRef(
           sizeMap[size],
           weightMap[weight],
           alignMap[align],
-          `text-${muted ? "slate-500" : color}`,
+          finalColor,
           className,
         )}
       >

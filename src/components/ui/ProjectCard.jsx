@@ -3,12 +3,11 @@
  * Follows design system: slate-50 background, blue-800 accents, clean spacing
  */
 import React from "react";
-import { ExternalLink, Github } from "lucide-react";
-import { Card } from "../ui/Card";
-import { Heading, Text } from "../ui/Typography";
-import { Badge, BadgeGroup } from "../ui/Badge";
-import { Button } from "../ui/Button";
-import { Stack } from "../ui/Section";
+import { ExternalLink } from "lucide-react";
+import { Card } from "./Card";
+import { Heading, Text } from "./Typography";
+import { Badge, BadgeGroup } from "./Badge";
+import { Button } from "./Button";
 import { transitions, cn } from "../../styles/theme";
 
 export const ProjectCard = ({
