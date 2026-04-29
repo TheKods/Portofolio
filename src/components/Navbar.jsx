@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Menu, X } from "lucide-react";
+import { transitions, cn } from "../styles/theme";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -80,55 +81,53 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed w-full top-0 z-50 transition-all duration-500 ${
+      className={cn(
+        "fixed w-full top-0 z-50",
+        transitions.default,
         isOpen
-          ? "bg-[#030014]"
+          ? "bg-slate-50"
           : scrolled
-            ? "bg-[#030014]/50 backdrop-blur-xl"
+            ? "bg-slate-50/95 backdrop-blur-md shadow-sm"
             : "bg-transparent"
-      }`}
+      )}
     >
-      <div className="mx-auto px-4 sm:px-6 lg:px-[10%]">
+      <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
             <a
               href="#Home"
               onClick={(e) => scrollToSection(e, "#Home")}
-              className="text-xl font-bold bg-gradient-to-r from-[#a855f7] to-[#6366f1] bg-clip-text text-transparent"
+              className={cn(
+                "text-xl font-bold",
+                transitions.default,
+                "text-blue-800 hover:text-blue-900"
+              )}
             >
-              <div className="flex items-center gap-2">
-                <span className="text-xl font-bold text-white">Welcome</span>
-              </div>
+              Rafi Hermawan
             </a>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:block">
-            <div className="ml-8 flex items-center space-x-8">
+            <div className="flex items-center gap-8">
               {navItems.map((item) => (
                 <a
                   key={item.label}
                   href={item.href}
                   onClick={(e) => scrollToSection(e, item.href)}
-                  className="group relative px-1 py-2 text-sm font-medium"
+                  className={cn(
+                    "relative px-1 py-2 text-sm font-medium",
+                    transitions.default,
+                    activeSection === item.href.substring(1)
+                      ? "text-blue-800"
+                      : "text-slate-600 hover:text-slate-900"
+                  )}
                 >
-                  <span
-                    className={`relative z-10 transition-colors duration-300 ${
-                      activeSection === item.href.substring(1)
-                        ? "bg-gradient-to-r from-[#6366f1] to-[#a855f7] bg-clip-text text-transparent font-semibold"
-                        : "text-[#e2d3fd] group-hover:text-white"
-                    }`}
-                  >
-                    {item.label}
-                  </span>
-                  <span
-                    className={`absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-[#6366f1] to-[#a855f7] transform origin-left transition-transform duration-300 ${
-                      activeSection === item.href.substring(1)
-                        ? "scale-x-100"
-                        : "scale-x-0 group-hover:scale-x-100"
-                    }`}
-                  />
+                  {item.label}
+                  {activeSection === item.href.substring(1) && (
+                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-800 rounded-full" />
+                  )}
                 </a>
               ))}
             </div>
@@ -138,9 +137,12 @@ const Navbar = () => {
           <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className={`relative p-2 text-[#e2d3fd] hover:text-white transition-transform duration-300 ease-in-out transform ${
-                isOpen ? "rotate-90 scale-125" : "rotate-0 scale-100"
-              }`}
+              className={cn(
+                "p-2 text-slate-900",
+                transitions.default,
+                "hover:text-blue-800"
+              )}
+              aria-label="Toggle menu"
             >
               {isOpen ? (
                 <X className="w-6 h-6" />
@@ -153,35 +155,28 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Menu */}
-      <div
-        className={`md:hidden transition-all duration-300 ease-in-out ${
-          isOpen
-            ? "max-h-screen opacity-100"
-            : "max-h-0 opacity-0 overflow-hidden"
-        }`}
-      >
-        <div className="px-4 py-6 space-y-4">
-          {navItems.map((item, index) => (
-            <a
-              key={item.label}
-              href={item.href}
-              onClick={(e) => scrollToSection(e, item.href)}
-              className={`block px-4 py-3 text-lg font-medium transition-all duration-300 ease ${
-                activeSection === item.href.substring(1)
-                  ? "bg-gradient-to-r from-[#6366f1] to-[#a855f7] bg-clip-text text-transparent font-semibold"
-                  : "text-[#e2d3fd] hover:text-white"
-              }`}
-              style={{
-                transitionDelay: `${index * 100}ms`,
-                transform: isOpen ? "translateX(0)" : "translateX(50px)",
-                opacity: isOpen ? 1 : 0,
-              }}
-            >
-              {item.label}
-            </a>
-          ))}
+      {isOpen && (
+        <div className="md:hidden bg-slate-50 border-t border-slate-200">
+          <div className="px-4 py-4 space-y-2">
+            {navItems.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                onClick={(e) => scrollToSection(e, item.href)}
+                className={cn(
+                  "block px-4 py-2.5 rounded-lg text-base font-medium",
+                  transitions.default,
+                  activeSection === item.href.substring(1)
+                    ? "bg-blue-50 text-blue-800"
+                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                )}
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </nav>
   );
 };
