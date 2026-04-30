@@ -10,6 +10,9 @@ import NotFoundPage from "./Pages/404";
 import Squares from "./components/Squares";
 import WelcomeOverlay from "./components/WelcomeOverlay";
 import SoundCloudPlayer from "./components/SoundCloudPlayer";
+import SkillsSection from "./components/SkillsSection";
+import ExperienceSection from "./components/ExperienceSection";
+import Footer from "./components/Footer";
 
 const LandingPage = () => {
   const [showWelcome, setShowWelcome] = useState(true);
@@ -49,20 +52,11 @@ const LandingPage = () => {
             <Navbar />
             <Home />
             <About />
+            <ExperienceSection />
+            <SkillsSection />
             <Portofolio />
             <ContactPage />
-            <footer>
-              <center>
-                <hr className="my-3 border-gray-400 opacity-15 sm:mx-auto lg:my-6 text-center" />
-                <span className="block text-sm pb-4 text-gray-500 text-center dark:text-gray-400">
-                  © {new Date().getFullYear()} {""}
-                  <a href="#Home" className="hover:underline">
-                    Rafi Hermawan™
-                  </a>
-                  . All Rights Reserved.
-                </span>
-              </center>
-            </footer>
+            <Footer />
           </div>
         </>
       )}

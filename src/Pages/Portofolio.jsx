@@ -1,86 +1,97 @@
-import React, { useEffect, useState, useCallback } from "react";
-import PropTypes from "prop-types";
-import { useTheme } from "@mui/material/styles";
-import AppBar from "@mui/material/AppBar";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
+import React, { useEffect, useState, useCallback, memo } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { Code, Award, Boxes } from "lucide-react";
+import {
+  Code,
+  Award,
+  Boxes,
+  Github,
+  ExternalLink,
+  ArrowRight,
+} from "lucide-react";
 import { projects, certificates } from "../data/localData";
-import { useDisclosure } from "../components/useDisclosure";
 import TechStackIcon from "../components/TechStackIcon";
 
-// Minimal placeholders to keep layout while refactoring
-const ProjectCard = ({ title, description, link }) => (
-  <a href={link} target="_blank" rel="noreferrer">
-    <div className="rounded-xl border border-white/10 p-4 bg-white/5 hover:bg-white/10 transition-colors">
-      <h4 className="text-white font-semibold mb-1">{title}</h4>
-      <p className="text-sm text-slate-300 line-clamp-3">{description}</p>
-    </div>
-  </a>
-);
+// Memoized Components
+const ProjectCard = memo(({ title, description, link, index }) => (
+  <div data-aos="fade-up" data-aos-delay={index * 100} data-aos-duration="600">
+    <a
+      href={link}
+      target="_blank"
+      rel="noreferrer"
+      className="group h-full block"
+    >
+      <div className="h-full bg-white border border-slate-200 rounded-xl p-6 hover:shadow-lg hover:border-blue-300 transition-all duration-300 flex flex-col">
+        <div className="flex-1">
+          <h4 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-blue-700 transition-colors">
+            {title}
+          </h4>
+          <p className="text-slate-600 text-sm leading-relaxed line-clamp-4 mb-4">
+            {description}
+          </p>
+        </div>
 
-const CertificateCard = ({ title, issuer, date, img, link }) => {
+        <div className="flex items-center gap-2 text-blue-600 font-medium text-sm group-hover:gap-3 transition-all duration-300">
+          View Project
+          <ArrowRight size={18} />
+        </div>
+      </div>
+    </a>
+  </div>
+));
+
+const CertificateCard = memo(({ title, issuer, date, img, link, index }) => {
   const normalizedSrc = img?.startsWith("/Sertif")
     ? img
     : `/Sertif/${img?.split("/").pop() || ""}`;
-  return (
-    <a
-      href={link || "#"}
-      target={link ? "_blank" : undefined}
-      rel={link ? "noreferrer" : undefined}
-    >
-      <div className="rounded-xl border border-white/10 p-4 bg-white/5 hover:bg-white/10 transition-colors">
-        {normalizedSrc && (
-          <img
-            src={normalizedSrc}
-            alt={title}
-            className="w-full h-40 object-cover rounded-lg mb-3"
-            loading="lazy"
-          />
-        )}
-        <h4 className="text-white font-semibold">{title}</h4>
-        <p className="text-xs text-slate-400">
-          {issuer} • {date}
-        </p>
-      </div>
-    </a>
-  );
-};
 
-function TabPanel({ children, value, index, ...other }) {
   return (
     <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`full-width-tabpanel-${index}`}
-      aria-labelledby={`full-width-tab-${index}`}
-      {...other}
+      data-aos="fade-up"
+      data-aos-delay={index * 100}
+      data-aos-duration="600"
     >
-      {value === index && (
-        <Box sx={{ p: { xs: 1, sm: 3 } }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      <a
+        href={link || "#"}
+        target={link ? "_blank" : undefined}
+        rel={link ? "noreferrer" : undefined}
+        className={link ? "group block h-full" : "block h-full"}
+      >
+        <div className="h-full bg-white border border-slate-200 rounded-xl overflow-hidden hover:shadow-lg hover:border-blue-300 transition-all duration-300 flex flex-col">
+          {normalizedSrc && (
+            <div className="relative w-full h-48 overflow-hidden bg-slate-100">
+              <img
+                src={normalizedSrc}
+                alt={title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                loading="lazy"
+              />
+            </div>
+          )}
+          <div className="p-6 flex-1 flex flex-col">
+            <h4 className="text-base font-bold text-slate-900 mb-2 line-clamp-2">
+              {title}
+            </h4>
+            <p className="text-xs text-slate-600 mb-4">
+              <span className="font-semibold">{issuer}</span>
+              <br />
+              {date}
+            </p>
+            {link && (
+              <div className="mt-auto text-blue-600 font-medium text-sm flex items-center gap-2">
+                View Certificate
+                <ExternalLink size={14} />
+              </div>
+            )}
+          </div>
+        </div>
+      </a>
     </div>
   );
-}
+});
 
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `full-width-tab-${index}`,
-    "aria-controls": `full-width-tabpanel-${index}`,
-  };
-}
+ProjectCard.displayName = "ProjectCard";
+CertificateCard.displayName = "CertificateCard";
 
 const techStacks = [
   "HTML",
@@ -98,220 +109,177 @@ const techStacks = [
   "YAML",
 ];
 
-export default function FullWidthTabs() {
-  const theme = useTheme();
-  const [value, setValue] = useState(0);
+// Tabs Component (Custom, no MUI)
+const TabButton = memo(({ active, onClick, icon: Icon, label }) => (
+  <button
+    onClick={onClick}
+    className={`flex items-center gap-2 px-4 py-3 font-semibold text-sm transition-all duration-300 ${
+      active
+        ? "text-blue-700 border-b-2 border-blue-700"
+        : "text-slate-600 hover:text-slate-900 border-b-2 border-transparent"
+    }`}
+  >
+    <Icon size={20} />
+    {label}
+  </button>
+));
 
-  // React Bits: useDisclosure for show more/less with prop getters
-  const projectsDisclosure = useDisclosure({ defaultOpen: false });
-  const certsDisclosure = useDisclosure({ defaultOpen: false });
+TabButton.displayName = "TabButton";
+
+const PortfolioPage = () => {
+  const [activeTab, setActiveTab] = useState(0);
+  const [projectsOpen, setProjectsOpen] = useState(false);
+  const [certsOpen, setCertsOpen] = useState(false);
+
+  useEffect(() => {
+    AOS.init({
+      once: true,
+      offset: 50,
+    });
+  }, []);
 
   const isMobile =
     typeof window !== "undefined" ? window.innerWidth < 768 : true;
   const initialItems = isMobile ? 4 : 6;
 
-  useEffect(() => {
-    // Initialize AOS once
-    AOS.init({
-      once: false,
-    });
-  }, []);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  const displayedProjects = projectsDisclosure.open
+  const displayedProjects = projectsOpen
     ? projects
     : projects.slice(0, initialItems);
-  const displayedCertificates = certsDisclosure.open
+  const displayedCertificates = certsOpen
     ? certificates
     : certificates.slice(0, initialItems);
 
+  const tabs = [
+    { icon: Code, label: "Projects", id: 0 },
+    { icon: Award, label: "Certificates", id: 1 },
+    { icon: Boxes, label: "Tech Stack", id: 2 },
+  ];
+
   return (
-    <div
-      className="md:px-[10%] px-[5%] w-full sm:mt-0 mt-[3rem] bg-[#030014] overflow-hidden"
-      id="Portofolio"
-    >
-      {/* Header section */}
-      <div
-        className="text-center pb-10"
-        data-aos="fade-up"
-        data-aos-duration="1000"
-      >
-        <h2 className="inline-block text-3xl md:text-5xl font-bold text-center mx-auto text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#a855f7]">
-          <span
-            style={{
-              color: "#6366f1",
-              backgroundImage:
-                "linear-gradient(45deg, #6366f1 10%, #a855f7 93%)",
-              WebkitBackgroundClip: "text",
-              backgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
-            Portfolio Showcase
-          </span>
-        </h2>
-        <p className="text-slate-400 max-w-2xl mx-auto text-sm md:text-base mt-2">
-          Explore my journey through projects, certifications, and technical
-          expertise. Each section represents a milestone in my continuous
-          learning path.
-        </p>
-      </div>
-
-      <Box sx={{ width: "100%" }}>
-        <AppBar
-          position="static"
-          elevation={0}
-          sx={{
-            bgcolor: "transparent",
-            border: "1px solid rgba(255, 255, 255, 0.1)",
-            borderRadius: "20px",
-            position: "relative",
-            overflow: "hidden",
-            "&::before": {
-              content: '""',
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background:
-                "linear-gradient(180deg, rgba(139, 92, 246, 0.03) 0%, rgba(59, 130, 246, 0.03) 100%)",
-              backdropFilter: "blur(10px)",
-              zIndex: 0,
-            },
-          }}
-          className="md:px-4"
+    <section className="py-16 md:py-20 bg-slate-50" id="Portofolio">
+      <div className="max-w-7xl mx-auto px-4 md:px-8">
+        {/* Header */}
+        <div
+          className="text-center mb-12 md:mb-16"
+          data-aos="fade-up"
+          data-aos-duration="600"
         >
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            textColor="secondary"
-            indicatorColor="secondary"
-            variant="fullWidth"
-            sx={{
-              "& .MuiTab-root": {
-                color: "rgba(255, 255, 255, 0.7)",
-                fontSize: { xs: "0.75rem", sm: "0.875rem" },
-                textTransform: "none",
-                fontWeight: "medium",
-                "&:hover": {
-                  color: "rgba(255, 255, 255, 0.9)",
-                },
-                "&.Mui-selected": {
-                  color: "#fff",
-                },
-              },
-              "& .MuiTabs-indicator": {
-                backgroundColor: "rgba(139, 92, 246, 0.8)",
-                height: "3px",
-                borderRadius: "3px 3px 0 0",
-              },
-            }}
-          >
-            <Tab
-              icon={<Code className="w-4 h-4 md:w-5 md:h-5" />}
-              label="Projects"
-              {...a11yProps(0)}
-              sx={{
-                minHeight: { xs: "48px", sm: "64px" },
-                py: { xs: 1, sm: 2 },
-              }}
-            />
-            <Tab
-              icon={<Award className="w-4 h-4 md:w-5 md:h-5" />}
-              label="Certificates"
-              {...a11yProps(1)}
-              sx={{
-                minHeight: { xs: "48px", sm: "64px" },
-                py: { xs: 1, sm: 2 },
-              }}
-            />
-            <Tab
-              icon={<Boxes className="w-4 h-4 md:w-5 md:h-5" />}
-              label="Tech Stack"
-              {...a11yProps(2)}
-              sx={{
-                minHeight: { xs: "48px", sm: "64px" },
-                py: { xs: 1, sm: 2 },
-              }}
-            />
-          </Tabs>
-        </AppBar>
+          <div className="inline-block mb-4">
+            <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">
+              Portfolio Showcase
+            </span>
+          </div>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-4">
+            Projects & Achievements
+          </h2>
+          <p className="text-base md:text-lg text-slate-600 max-w-2xl mx-auto">
+            Explore my journey through projects, certifications, and technical
+            expertise. Each section represents a milestone in my continuous
+            learning path.
+          </p>
+        </div>
 
-        <div className="mt-8">
+        {/* Tabs */}
+        <div className="mb-12">
+          <div className="border-b border-slate-200 flex gap-2 md:gap-8 overflow-x-auto">
+            {tabs.map((tab) => (
+              <TabButton
+                key={tab.id}
+                active={activeTab === tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                icon={tab.icon}
+                label={tab.label}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Tab Content */}
+        <div className="min-h-96">
           {/* Projects Tab */}
-          <TabPanel value={value} index={0}>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {displayedProjects.map((project, index) => (
-                <div
-                  key={project.id}
-                  data-aos="fade-up"
-                  data-aos-delay={index * 100}
-                >
-                  <ProjectCard
-                    title={project.title}
-                    description={project.description}
-                    link={project.link}
-                  />
-                </div>
-              ))}
-            </div>
-            {projects.length > initialItems && (
-              <div className="flex justify-center mt-8">
-                <button
-                  {...projectsDisclosure.getToggleProps({
-                    className:
-                      "px-3 py-1.5 text-slate-300 hover:text-white text-sm font-medium transition-all duration-300 ease-in-out flex items-center gap-2 bg-white/5 hover:bg-white/10 rounded-md border border-white/10 hover:border-white/20 backdrop-blur-sm",
-                  })}
-                >
-                  {projectsDisclosure.open ? "See Less" : "See More"}
-                </button>
+          {activeTab === 0 && (
+            <div className="space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {displayedProjects.map((project, index) => (
+                  <ProjectCard key={project.id} {...project} index={index} />
+                ))}
               </div>
-            )}
-          </TabPanel>
+              {projects.length > initialItems && (
+                <div className="flex justify-center pt-4">
+                  <button
+                    onClick={() => setProjectsOpen(!projectsOpen)}
+                    className="px-6 py-2.5 text-blue-700 hover:text-blue-800 font-semibold text-sm border border-blue-700 hover:border-blue-800 rounded-lg transition-all duration-300 hover:bg-blue-50"
+                  >
+                    {projectsOpen ? "See Less Projects" : "See More Projects"}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Certificates Tab */}
-          <TabPanel value={value} index={1}>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {displayedCertificates.map((certificate, index) => (
-                <div
-                  key={certificate.id}
-                  data-aos="fade-up"
-                  data-aos-delay={index * 100}
-                >
-                  <CertificateCard {...certificate} />
-                </div>
-              ))}
-            </div>
-            {certificates.length > initialItems && (
-              <div className="flex justify-center mt-8">
-                <button
-                  {...certsDisclosure.getToggleProps({
-                    className:
-                      "px-3 py-1.5 text-slate-300 hover:text-white text-sm font-medium transition-all duration-300 ease-in-out flex items-center gap-2 bg-white/5 hover:bg-white/10 rounded-md border border-white/10 hover:border-white/20 backdrop-blur-sm",
-                  })}
-                >
-                  {certsDisclosure.open ? "See Less" : "See More"}
-                </button>
+          {activeTab === 1 && (
+            <div className="space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {displayedCertificates.map((cert, index) => (
+                  <CertificateCard key={cert.id} {...cert} index={index} />
+                ))}
               </div>
-            )}
-          </TabPanel>
+              {certificates.length > initialItems && (
+                <div className="flex justify-center pt-4">
+                  <button
+                    onClick={() => setCertsOpen(!certsOpen)}
+                    className="px-6 py-2.5 text-blue-700 hover:text-blue-800 font-semibold text-sm border border-blue-700 hover:border-blue-800 rounded-lg transition-all duration-300 hover:bg-blue-50"
+                  >
+                    {certsOpen
+                      ? "See Less Certificates"
+                      : "See More Certificates"}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Tech Stack Tab */}
-          <TabPanel value={value} index={2}>
+          {activeTab === 2 && (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
               {techStacks.map((name, index) => (
-                <div key={name} data-aos="fade-up" data-aos-delay={index * 100}>
+                <div
+                  key={name}
+                  data-aos="fade-up"
+                  data-aos-delay={index * 50}
+                  data-aos-duration="600"
+                >
                   <TechStackIcon name={name} />
                 </div>
               ))}
             </div>
-          </TabPanel>
+          )}
         </div>
-      </Box>
-    </div>
+
+        {/* Call to Action */}
+        <div
+          className="mt-16 md:mt-20 text-center"
+          data-aos="fade-up"
+          data-aos-delay="400"
+          data-aos-duration="600"
+        >
+          <p className="text-slate-600 mb-6">
+            Want to see more of my work or collaborate?
+          </p>
+          <a
+            href="https://github.com/TheKods"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-8 py-3 bg-blue-800 text-white font-semibold rounded-lg hover:bg-blue-900 transition-all duration-300 hover:shadow-lg"
+          >
+            <Github size={20} />
+            View on GitHub
+          </a>
+        </div>
+      </div>
+    </section>
   );
-}
+};
+
+export default PortfolioPage;

@@ -168,7 +168,7 @@ const Home = () => {
   useEffect(() => {
     const timeout = setTimeout(
       handleTyping,
-      isTyping ? TYPING_SPEED : ERASING_SPEED
+      isTyping ? TYPING_SPEED : ERASING_SPEED,
     );
     return () => clearTimeout(timeout);
   }, [handleTyping]);
@@ -244,7 +244,7 @@ const Home = () => {
 
                 {/* CTA Buttons */}
                 <div
-                  className="flex flex-row gap-3 w-full justify-start"
+                  className="flex flex-col sm:flex-row gap-3 w-full justify-start"
                   data-aos="fade-up"
                   data-aos-delay="1400"
                 >
