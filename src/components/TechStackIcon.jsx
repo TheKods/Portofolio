@@ -24,11 +24,13 @@ const NAME_TO_ICON = {
 export default function TechStackIcon({ name }) {
   const Icon = NAME_TO_ICON[name] || Boxes;
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors p-3">
-      <div className="w-8 h-8 flex items-center justify-center text-white/90">
-        <Icon size={24} />
+    <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 hover:border-blue-400 transition-all duration-300 p-4 shadow-sm hover:shadow-md">
+      <div className="w-8 h-8 flex items-center justify-center text-blue-700">
+        <Icon size={32} />
       </div>
-      <span className="text-slate-200 text-sm">{name}</span>
+      <span className="text-slate-900 text-sm font-semibold text-center">
+        {name}
+      </span>
     </div>
   );
 }

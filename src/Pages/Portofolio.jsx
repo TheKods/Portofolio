@@ -45,47 +45,55 @@ const CertificateCard = memo(({ title, issuer, date, img, link, index }) => {
     ? img
     : `/Sertif/${img?.split("/").pop() || ""}`;
 
+  const cardContent = (
+    <div className="h-full bg-white border border-slate-200 rounded-xl overflow-hidden hover:shadow-lg hover:border-blue-300 transition-all duration-300 flex flex-col">
+      {normalizedSrc && (
+        <div className="relative w-full h-48 overflow-hidden bg-slate-100">
+          <img
+            src={normalizedSrc}
+            alt={title}
+            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+          />
+        </div>
+      )}
+      <div className="p-6 flex-1 flex flex-col">
+        <h4 className="text-base font-bold text-slate-900 mb-2 line-clamp-2">
+          {title}
+        </h4>
+        <p className="text-xs text-slate-600 mb-4">
+          <span className="font-semibold">{issuer}</span>
+          <br />
+          {date}
+        </p>
+        {link && (
+          <div className="mt-auto text-blue-600 font-medium text-sm flex items-center gap-2">
+            View Certificate
+            <ExternalLink size={14} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
   return (
     <div
       data-aos="fade-up"
       data-aos-delay={index * 100}
       data-aos-duration="600"
     >
-      <a
-        href={link || "#"}
-        target={link ? "_blank" : undefined}
-        rel={link ? "noreferrer" : undefined}
-        className={link ? "group block h-full" : "block h-full"}
-      >
-        <div className="h-full bg-white border border-slate-200 rounded-xl overflow-hidden hover:shadow-lg hover:border-blue-300 transition-all duration-300 flex flex-col">
-          {normalizedSrc && (
-            <div className="relative w-full h-48 overflow-hidden bg-slate-100">
-              <img
-                src={normalizedSrc}
-                alt={title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                loading="lazy"
-              />
-            </div>
-          )}
-          <div className="p-6 flex-1 flex flex-col">
-            <h4 className="text-base font-bold text-slate-900 mb-2 line-clamp-2">
-              {title}
-            </h4>
-            <p className="text-xs text-slate-600 mb-4">
-              <span className="font-semibold">{issuer}</span>
-              <br />
-              {date}
-            </p>
-            {link && (
-              <div className="mt-auto text-blue-600 font-medium text-sm flex items-center gap-2">
-                View Certificate
-                <ExternalLink size={14} />
-              </div>
-            )}
-          </div>
-        </div>
-      </a>
+      {link ? (
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group block h-full"
+        >
+          {cardContent}
+        </a>
+      ) : (
+        <div className="block h-full">{cardContent}</div>
+      )}
     </div>
   );
 });
