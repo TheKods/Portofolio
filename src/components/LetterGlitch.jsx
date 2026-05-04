@@ -1,7 +1,14 @@
 import { useRef, useEffect } from "react";
 
 const LetterGlitch = ({
-  glitchColors = ["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "#00ffff"],
+  glitchColors = [
+    "#ff0000",
+    "#00ff00",
+    "#0000ff",
+    "#ffff00",
+    "#ff00ff",
+    "#00ffff",
+  ],
   className = "",
   glitchSpeed = 50,
   centerVignette = false,
@@ -125,7 +132,9 @@ const LetterGlitch = ({
       const x = (index % grid.current.columns) * charWidth;
       const y = Math.floor(index / grid.current.columns) * charHeight;
       ctx.fillStyle = letter.color;
-      console.log(`Drawing letter "${letter.char}" at (${x}, ${y}) with color ${letter.color}`);
+      console.log(
+        `Drawing letter "${letter.char}" at (${x}, ${y}) with color ${letter.color}`,
+      );
       ctx.fillText(letter.char, x, y);
     });
     console.log("Letters drawn");
