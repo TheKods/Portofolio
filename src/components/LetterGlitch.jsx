@@ -176,10 +176,15 @@ const LetterGlitch = ({
   };
 
   useEffect(() => {
+    console.log("LetterGlitch useEffect triggered");
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) {
+      console.log("Canvas not found");
+      return;
+    }
 
     context.current = canvas.getContext("2d");
+    console.log("Canvas context:", context.current);
     resizeCanvas();
     animate();
 
