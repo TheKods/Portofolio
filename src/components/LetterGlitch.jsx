@@ -161,6 +161,7 @@ const LetterGlitch = ({
   };
 
   const animate = () => {
+    console.log("Animate function called");
     const now = Date.now();
     if (now - lastGlitchTime.current >= glitchSpeed) {
       updateLetters();
