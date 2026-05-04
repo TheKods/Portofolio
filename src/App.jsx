@@ -8,8 +8,6 @@ import Portofolio from "./Pages/Portofolio";
 import ContactPage from "./Pages/Contact";
 import NotFoundPage from "./Pages/404";
 import WelcomeOverlay from "./components/WelcomeOverlay";
-import Hyperspeed from "./components/Hyperspeed";
-import LetterGlitch from "./components/LetterGlitch";
 import SoundCloudPlayer from "./components/SoundCloudPlayer";
 import SkillsSection from "./components/SkillsSection";
 import ExperienceSection from "./components/ExperienceSection";
@@ -28,31 +26,8 @@ const LandingPage = () => {
         durationMs={3000}
       />
 
-      {showWelcome && (
-        <div className="relative min-h-screen">
-          <div className="absolute inset-0 -z-10">
-            <Hyperspeed />
-          </div>
-          <WelcomeOverlay
-            isOpen={showWelcome}
-            onClose={() => setShowWelcome(false)}
-            title="Welcome"
-            subtitle="Preparing your personalized portfolio..."
-            durationMs={3000}
-          />
-        </div>
-      )}
-
       {!showWelcome && (
-        <div className="relative min-h-screen">
-          <div className="absolute inset-0 -z-10">
-            <LetterGlitch
-              glitchSpeed={50}
-              centerVignette={true}
-              outerVignette={false}
-              smooth={true}
-            />
-          </div>
+        <>
           <SoundCloudPlayer
             defaultVolume={0.8}
             autoPlay
@@ -73,7 +48,7 @@ const LandingPage = () => {
             <ContactPage />
             <Footer />
           </div>
-        </div>
+        </>
       )}
     </>
   );
