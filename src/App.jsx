@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React, { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import "./index.css";
 import Home from "./Pages/Home";
 import About from "./Pages/About";
@@ -21,36 +20,20 @@ const LandingPage = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <AnimatePresence mode="wait">
-        {showWelcome ? (
-          <motion.div
-            key="hyperspeed"
-            className="absolute inset-0 -z-10"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
-          >
-            <Hyperspeed />
-          </motion.div>
-        ) : (
-          <motion.div
-            key="letterglitch"
-            className="absolute inset-0 -z-10"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
-          >
-            <LetterGlitch
-              glitchSpeed={50}
-              centerVignette={true}
-              outerVignette={false}
-              smooth={true}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {showWelcome ? (
+        <div className="absolute inset-0 -z-10">
+          <Hyperspeed />
+        </div>
+      ) : (
+        <div className="absolute inset-0 -z-10">
+          <LetterGlitch
+            glitchSpeed={50}
+            centerVignette={true}
+            outerVignette={false}
+            smooth={true}
+          />
+        </div>
+      )}
 
       {showWelcome ? (
         <WelcomeOverlay

@@ -191,7 +191,10 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-transparent overflow-hidden" id="Home">
+    <div
+      className="min-h-screen bg-transparent overflow-hidden relative"
+      id="Home"
+    >
       <div
         className={`relative z-10 transition-all duration-1000 ${
           isLoaded ? "opacity-100" : "opacity-0"

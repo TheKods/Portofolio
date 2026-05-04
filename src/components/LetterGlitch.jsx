@@ -206,7 +206,7 @@ const LetterGlitch = ({
     position: "relative",
     width: "100%",
     height: "100%",
-    backgroundColor: "#000000",
+    backgroundColor: "#ff0000", // Temporary red background for debugging
     overflow: "hidden",
   };
 
