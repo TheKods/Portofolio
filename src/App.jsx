@@ -20,20 +20,14 @@ const LandingPage = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {showWelcome ? (
-        <div className="absolute inset-0 -z-10">
-          <Hyperspeed />
-        </div>
-      ) : (
-        <div className="absolute inset-0 -z-10">
-          <LetterGlitch
-            glitchSpeed={50}
-            centerVignette={true}
-            outerVignette={false}
-            smooth={true}
-          />
-        </div>
-      )}
+      <div className="absolute inset-0 z-0">
+        <LetterGlitch
+          glitchSpeed={50}
+          centerVignette={true}
+          outerVignette={false}
+          smooth={true}
+        />
+      </div>
 
       {showWelcome ? (
         <WelcomeOverlay
