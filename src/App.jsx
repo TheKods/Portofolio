@@ -7,7 +7,6 @@ import Navbar from "./components/Navbar";
 import Portofolio from "./Pages/Portofolio";
 import ContactPage from "./Pages/Contact";
 import NotFoundPage from "./Pages/404";
-import Squares from "./components/Squares";
 import WelcomeOverlay from "./components/WelcomeOverlay";
 import SoundCloudPlayer from "./components/SoundCloudPlayer";
 import SkillsSection from "./components/SkillsSection";
@@ -29,15 +28,6 @@ const LandingPage = () => {
 
       {!showWelcome && (
         <>
-          <Squares
-            speed={20}
-            squareSize={64}
-            direction="diagonal"
-            borderColor="#7c7c7c"
-            opacity={0.28}
-            lineWidth={2}
-            className="fixed inset-0 z-0 pointer-events-none"
-          />
           <SoundCloudPlayer
             defaultVolume={0.8}
             autoPlay
