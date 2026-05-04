@@ -74,13 +74,21 @@ const LetterGlitch = ({
   };
 
   const resizeCanvas = () => {
+    console.log("resizeCanvas called");
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) {
+      console.log("Canvas not found in resizeCanvas");
+      return;
+    }
     const parent = canvas.parentElement;
-    if (!parent) return;
+    if (!parent) {
+      console.log("Parent not found");
+      return;
+    }
 
     const dpr = window.devicePixelRatio || 1;
     const rect = parent.getBoundingClientRect();
+    console.log("Parent rect:", rect);
 
     canvas.width = rect.width * dpr;
     canvas.height = rect.height * dpr;
@@ -93,6 +101,7 @@ const LetterGlitch = ({
     }
 
     const { columns, rows } = calculateGrid(rect.width, rect.height);
+    console.log("Grid:", columns, rows);
     initializeLetters(columns, rows);
 
     drawLetters();
