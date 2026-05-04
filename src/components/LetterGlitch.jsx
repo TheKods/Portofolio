@@ -195,6 +195,14 @@ const LetterGlitch = ({
 
     context.current = canvas.getContext("2d");
     console.log("Canvas context:", context.current);
+
+    // Test draw
+    if (context.current) {
+      context.current.fillStyle = "#00ff00";
+      context.current.fillRect(0, 0, 100, 100);
+      console.log("Test rectangle drawn");
+    }
+
     resizeCanvas();
     animate();
 
