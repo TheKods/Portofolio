@@ -9,6 +9,7 @@ const LetterGlitch = ({
   smooth = true,
   characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$&*()-_+=/[]{};:<>.,0123456789",
 }) => {
+  console.log("LetterGlitch component rendered");
   const canvasRef = useRef(null);
   const animationRef = useRef(null);
   const letters = useRef([]);
@@ -108,10 +109,15 @@ const LetterGlitch = ({
   };
 
   const drawLetters = () => {
-    if (!context.current || letters.current.length === 0) return;
+    console.log("drawLetters called, letters length:", letters.current.length);
+    if (!context.current || letters.current.length === 0) {
+      console.log("No context or no letters");
+      return;
+    }
     const ctx = context.current;
     const { width, height } = canvasRef.current.getBoundingClientRect();
-    ctx.clearRect(0, 0, width, height);
+    console.log("Canvas rect:", width, height);
+    // ctx.clearRect(0, 0, width, height); // Temporarily disabled for debugging
     ctx.font = `${fontSize}px monospace`;
     ctx.textBaseline = "top";
 
@@ -119,8 +125,10 @@ const LetterGlitch = ({
       const x = (index % grid.current.columns) * charWidth;
       const y = Math.floor(index / grid.current.columns) * charHeight;
       ctx.fillStyle = letter.color;
+      console.log(`Drawing letter "${letter.char}" at (${x}, ${y}) with color ${letter.color}`);
       ctx.fillText(letter.char, x, y);
     });
+    console.log("Letters drawn");
   };
 
   const updateLetters = () => {
