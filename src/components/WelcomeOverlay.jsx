@@ -1,9 +1,5 @@
 import React, { useEffect, useMemo } from "react";
-<<<<<<< HEAD
-import Hyperspeed from "./Hyperspeed";
-=======
 import LetterGlitch from "./LetterGlitch";
->>>>>>> parent of a65f5e4 (V4.1)
 import { AnimatePresence, motion } from "framer-motion";
 
 export default function WelcomeOverlay({
@@ -70,11 +66,6 @@ export default function WelcomeOverlay({
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4, ease: "easeInOut" }}
         >
-<<<<<<< HEAD
-          {/* Hyperspeed background */}
-          <div className="absolute inset-0">
-            <Hyperspeed effectOptions={options} />
-=======
           {/* LetterGlitch background */}
           <div className="absolute inset-0">
             <LetterGlitch
@@ -83,7 +74,6 @@ export default function WelcomeOverlay({
               outerVignette={false}
               smooth={true}
             />
->>>>>>> parent of a65f5e4 (V4.1)
           </div>
           {/* Dim overlay */}
           <motion.div
