@@ -1,0 +1,72 @@
+.letter-glitch {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: radial-gradient(circle at 15% 20%, rgba(245, 101, 255, 0.08), transparent 16%),
+    radial-gradient(circle at 80% 10%, rgba(64, 191, 255, 0.08), transparent 14%),
+    radial-gradient(circle at 50% 80%, rgba(40, 255, 180, 0.05), transparent 24%),
+    #050505;
+}
+
+.letter-glitch-layer {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(0deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 100% 24px, 24px 100%;
+  opacity: 0.18;
+  animation: glitchLayer 5s infinite linear;
+  mix-blend-mode: screen;
+}
+
+.letter-glitch-smooth {
+  animation-duration: 8s;
+}
+
+.letter-glitch-noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.18;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  mix-blend-mode: screen;
+  animation: glitchNoise 0.4s infinite linear;
+}
+
+.letter-glitch-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.letter-glitch-vignette.center {
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.08), transparent 30%);
+}
+
+.letter-glitch-vignette.outer {
+  background: radial-gradient(circle at center, transparent 50%, rgba(0, 0, 0, 0.72) 100%);
+}
+
+@keyframes glitchLayer {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(6px, -4px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes glitchNoise {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 56px 38px;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}

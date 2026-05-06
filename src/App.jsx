@@ -19,24 +19,26 @@ const LandingPage = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <div className="absolute inset-0 z-0">
-        <LetterGlitch
-          glitchSpeed={50}
-          centerVignette={true}
-          outerVignette={false}
-          smooth={true}
-        />
-      </div>
+      {!showWelcome && (
+        <div className="absolute inset-0 z-0">
+          <LetterGlitch
+            glitchSpeed={50}
+            centerVignette={true}
+            outerVignette={false}
+            smooth={true}
+          />
+        </div>
+      )}
 
-      {showWelcome ? (
-        <WelcomeOverlay
-          isOpen={showWelcome}
-          onClose={() => setShowWelcome(false)}
-          title="Welcome"
-          subtitle="Preparing your personalized portfolio..."
-          durationMs={3000}
-        />
-      ) : (
+      <WelcomeOverlay
+        isOpen={showWelcome}
+        onClose={() => setShowWelcome(false)}
+        title="Welcome"
+        subtitle="Preparing your personalized portfolio..."
+        durationMs={3000}
+      />
+
+      {!showWelcome && (
         <>
           <SoundCloudPlayer
             defaultVolume={0.8}
