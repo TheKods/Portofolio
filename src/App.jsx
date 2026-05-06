@@ -8,11 +8,7 @@ import Portofolio from "./Pages/Portofolio";
 import ContactPage from "./Pages/Contact";
 import NotFoundPage from "./Pages/404";
 import WelcomeOverlay from "./components/WelcomeOverlay";
-<<<<<<< HEAD
-import Hyperspeed from "./components/Hyperspeed";
 import LetterGlitch from "./components/LetterGlitch";
-=======
->>>>>>> parent of a65f5e4 (V4.1)
 import SoundCloudPlayer from "./components/SoundCloudPlayer";
 import SkillsSection from "./components/SkillsSection";
 import ExperienceSection from "./components/ExperienceSection";
