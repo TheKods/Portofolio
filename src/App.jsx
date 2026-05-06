@@ -8,7 +8,6 @@ import Portofolio from "./Pages/Portofolio";
 import ContactPage from "./Pages/Contact";
 import NotFoundPage from "./Pages/404";
 import WelcomeOverlay from "./components/WelcomeOverlay";
-import LetterGlitch from "./components/LetterGlitch";
 import SoundCloudPlayer from "./components/SoundCloudPlayer";
 import SkillsSection from "./components/SkillsSection";
 import ExperienceSection from "./components/ExperienceSection";
@@ -18,18 +17,7 @@ const LandingPage = () => {
   const [showWelcome, setShowWelcome] = useState(true);
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
-      {!showWelcome && (
-        <div className="absolute inset-0 z-0">
-          <LetterGlitch
-            glitchSpeed={50}
-            centerVignette={true}
-            outerVignette={false}
-            smooth={true}
-          />
-        </div>
-      )}
-
+    <div className={`relative min-h-screen overflow-hidden ${!showWelcome ? 'letter-glitch-bg' : ''}`}>
       <WelcomeOverlay
         isOpen={showWelcome}
         onClose={() => setShowWelcome(false)}
@@ -50,7 +38,7 @@ const LandingPage = () => {
               "https://soundcloud.com/user-356546060/way-home",
             ]}
           />
-          <div className="relative z-10">
+          <div className="relative z-10" style={{ position: 'relative', zIndex: 10 }}>
             <Navbar />
             <Home />
             <About />
