@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from "react";
-import Hyperspeed from "./Hyperspeed";
+import Hyperspeed from "../effects/Hyperspeed";
 import { AnimatePresence, motion } from "framer-motion";
 
 export default function WelcomeOverlay({

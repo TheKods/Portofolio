@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "../styles/theme";
+import { cn } from "../../lib/theme";
 
 /**
  * Section Component - Main page section wrapper

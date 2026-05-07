@@ -69,7 +69,7 @@ const ExperienceSection = memo(() => {
       institution: "Universitas Gunadarma",
       year: "2024",
       achievements: [
-        "GPA: 3.5+",
+        "GPA: 3.8/4.0",
         "Internship: Cloud Computing",
         "Awards: Dean's List",
       ],

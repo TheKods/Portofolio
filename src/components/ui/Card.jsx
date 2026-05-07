@@ -1,5 +1,5 @@
 import React from "react";
-import { transitions, spacing, hoverEffects, cn } from "../styles/theme";
+import { transitions, spacing, hoverEffects, cn } from "../../lib/theme";
 
 /**
  * Card Component - Flexible container with professional styling

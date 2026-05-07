@@ -8,7 +8,7 @@ import { Card } from "./Card";
 import { Heading, Text } from "./Typography";
 import { Badge, BadgeGroup } from "./Badge";
 import { Button } from "./Button";
-import { transitions, cn } from "../../styles/theme";
+import { transitions, cn } from "../../lib/theme";
 
 export const ProjectCard = ({
   title,

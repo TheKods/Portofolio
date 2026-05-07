@@ -1,6 +1,6 @@
 import React from 'react';
 import { Home, ArrowLeft } from 'lucide-react';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/common/Navbar';
 
 export default function NotFoundPage() {
   const handleGoBack = () => {

@@ -5,7 +5,7 @@ import {
   spacing,
   hoverEffects,
   cn,
-} from "../styles/theme";
+} from "../../lib/theme";
 
 /**
  * Button Component - Flexible, Professional Design System Button

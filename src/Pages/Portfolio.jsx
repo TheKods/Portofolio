@@ -10,7 +10,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { projects, certificates } from "../data/localData";
-import TechStackIcon from "../components/TechStackIcon";
+import TechStackIcon from "../components/pages/TechStackIcon";
 
 // Memoized Components
 const ProjectCard = memo(({ title, description, link, index }) => (

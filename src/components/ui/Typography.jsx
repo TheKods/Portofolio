@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "../styles/theme";
+import { cn } from "../../lib/theme";
 
 /**
  * Typography Components - Professional text hierarchy
