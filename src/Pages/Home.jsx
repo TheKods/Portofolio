@@ -54,31 +54,15 @@ const MainTitle = memo(() => (
   </div>
 ));
 
-const TechStack = memo(({ tech }) => (
-  <div className="px-4 py-2 hidden sm:block rounded-full bg-white/10 backdrop-blur-sm border border-white/10 text-sm text-gray-100/90 hover:bg-white/15 transition-colors">
-    {tech}
-  </div>
-));
-
-const CTAButton = memo(({ href, text, icon: Icon }) => (
-  <a href={href}>
-    <button className="group relative w-[160px]">
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-[#4f52c9] to-[#8644c5] rounded-xl opacity-50 blur-md group-hover:opacity-90 transition-all duration-700"></div>
-      <div className="relative h-11 bg-[#0b0b16] backdrop-blur-xl rounded-lg border border-white/10 leading-none overflow-hidden">
-        <div className="absolute inset-0 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 bg-gradient-to-r from-[#4f52c9]/20 to-[#8644c5]/20"></div>
-        <span className="absolute inset-0 flex items-center justify-center gap-2 text-sm group-hover:gap-3 transition-all duration-300">
-          <span className="text-gray-100 font-medium z-10">{text}</span>
-          <Icon
-            className={`w-4 h-4 text-gray-100 ${
-              text === "Contact"
-                ? "group-hover:translate-x-1"
-                : "group-hover:rotate-45"
-            } transform transition-all duration-300 z-10`}
-          />
-        </span>
-      </div>
-    </button>
-  </a>
+const Subtitle = memo(() => (
+  <p
+    className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-3xl leading-relaxed"
+    data-aos="fade-up"
+    data-aos-delay="800"
+  >
+    Crafting robust backend solutions with modern technologies. Specialized in
+    building scalable APIs, microservices, and cloud-native applications.
+  </p>
 ));
 
 const SocialLink = memo(({ icon: Icon, link }) => (
@@ -98,54 +82,30 @@ const ERASING_SPEED = 50;
 const PAUSE_DURATION = 2000;
 const WORDS = [
   "Information Systems Student",
-  "Cloud Computing Enthusiast",
-  "Web Developer",
-];
-const TECH_STACK = [
-  "JavaScript",
-  "Java Spring Boot",
-  "Google Cloud",
-  "MySQL",
-  "REST API",
-  "Git",
-  "Maven",
-  "BPMN",
-];
-const SOCIAL_LINKS = [
-  { icon: Github, link: "https://github.com/TheKods" },
-  { icon: Linkedin, link: "https://www.linkedin.com/in/rafi-hermawan/" },
-  { icon: Instagram, link: "https://www.instagram.com/rafi_hermawan" },
-  { icon: Mail, link: "mailto:rafihermawan06@gmail.com" },
+  "Backend Developer",
+  "API Designer",
+  "Cloud Engineer",
 ];
 
-const Home = () => {
+export default function Home() {
   const [text, setText] = useState("");
-  const [isTyping, setIsTyping] = useState(true);
   const [wordIndex, setWordIndex] = useState(0);
+  const [isTyping, setIsTyping] = useState(true);
   const [charIndex, setCharIndex] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
 
-  // Optimize AOS initialization
   useEffect(() => {
-    const initAOS = () => {
-      AOS.init({
-        once: true,
-        offset: 10,
-      });
-    };
+    AOS.init({
+      duration: 1000,
+      once: true,
+      offset: 100,
+    });
 
-    initAOS();
-    window.addEventListener("resize", initAOS);
-    return () => window.removeEventListener("resize", initAOS);
+    const timer = setTimeout(() => setIsLoaded(true), 500);
+    return () => clearTimeout(timer);
   }, []);
 
-  useEffect(() => {
-    setIsLoaded(true);
-    return () => setIsLoaded(false);
-  }, []);
-
-  // Optimize typing effect
   const handleTyping = useCallback(() => {
     if (isTyping) {
       if (charIndex < WORDS[wordIndex].length) {
@@ -200,107 +160,104 @@ const Home = () => {
           isLoaded ? "opacity-100" : "opacity-0"
         }`}
       >
-        <div className="container mx-auto px-[5%] sm:px-6 lg:px-[0%] min-h-screen">
-          <div className="flex flex-col lg:flex-row items-center justify-center h-screen md:justify-between gap-0 sm:gap-12 lg:gap-20">
-            {/* Left Column */}
-            <div
-              className="w-full lg:w-1/2 space-y-6 sm:space-y-8 text-left lg:text-left order-1 lg:order-1 lg:mt-0"
-              data-aos="fade-right"
-              data-aos-delay="200"
-            >
-              <div className="space-y-4 sm:space-y-6">
-                <StatusBadge />
-                <MainTitle />
+        {/* Hero Section */}
+        <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Left Content */}
+            <div className="space-y-8 text-center lg:text-left">
+              <StatusBadge />
 
-                {/* Typing Effect */}
-                <div
-                  className="h-8 flex items-center"
-                  data-aos="fade-up"
-                  data-aos-delay="800"
+              <MainTitle />
+
+              <Subtitle />
+
+              {/* Typing Animation */}
+              <div
+                className="text-xl sm:text-2xl font-mono text-[#c7d2fe] min-h-[2rem] flex items-center justify-center lg:justify-start"
+                data-aos="fade-up"
+                data-aos-delay="1000"
+              >
+                <span className="mr-1">&gt;</span>
+                <span>{text}</span>
+                <span className="animate-pulse">|</span>
+              </div>
+
+              {/* CTA Buttons */}
+              <div
+                className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+                data-aos="fade-up"
+                data-aos-delay="1200"
+              >
+                <a
+                  href="#Portfolio"
+                  className="group relative px-8 py-4 bg-gradient-to-r from-[#6366f1] to-[#a855f7] rounded-xl font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                 >
-                  <span className="text-xl md:text-2xl text-gray-100 font-light">
-                    {text}
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-[#6366f1] to-[#a855f7] rounded-xl blur opacity-30 group-hover:opacity-50 transition duration-300"></div>
+                  <span className="relative flex items-center justify-center gap-2">
+                    <Code2 className="w-5 h-5" />
+                    View My Work
                   </span>
-                  <span className="w-[3px] h-6 bg-gradient-to-t from-[#6366f1] to-[#a855f7] ml-1 animate-blink"></span>
-                </div>
+                </a>
 
-                {/* Description */}
-                <p
-                  className="text-base md:text-lg text-gray-300 max-w-xl leading-relaxed"
-                  data-aos="fade-up"
-                  data-aos-delay="1000"
+                <a
+                  href="#About"
+                  className="px-8 py-4 border-2 border-white/20 rounded-xl font-semibold text-white hover:bg-white/10 transition-all duration-300"
                 >
-                  seorang mahasiswa yang memiliki minat dalam bidang teknologi
-                  informasi dan pengembangan perangkat lunak.
-                </p>
+                  Learn More
+                </a>
+              </div>
 
-                {/* Tech Stack */}
-                <div
-                  className="flex flex-wrap gap-3 justify-start"
-                  data-aos="fade-up"
-                  data-aos-delay="1200"
-                >
-                  {TECH_STACK.map((tech, index) => (
-                    <TechStack key={index} tech={tech} />
-                  ))}
-                </div>
-
-                {/* CTA Buttons */}
-                <div
-                  className="flex flex-col sm:flex-row gap-3 w-full justify-start"
-                  data-aos="fade-up"
-                  data-aos-delay="1400"
-                >
-                  <CTAButton
-                    href="#Portofolio"
-                    text="Projects"
-                    icon={ExternalLink}
-                  />
-                  <CTAButton href="#Contact" text="Contact" icon={Mail} />
-                </div>
-
-                {/* Social Links */}
-                <div
-                  className="hidden sm:flex gap-4 justify-start"
-                  data-aos="fade-up"
-                  data-aos-delay="1600"
-                >
-                  {SOCIAL_LINKS.map((social, index) => (
-                    <SocialLink key={index} {...social} />
-                  ))}
-                </div>
+              {/* Social Links */}
+              <div
+                className="flex justify-center lg:justify-start gap-4 pt-4"
+                data-aos="fade-up"
+                data-aos-delay="1400"
+              >
+                <SocialLink
+                  icon={Github}
+                  link="https://github.com/TheKods"
+                />
+                <SocialLink
+                  icon={Linkedin}
+                  link="https://linkedin.com/in/rafi-hermawan"
+                />
+                <SocialLink
+                  icon={Mail}
+                  link="mailto:rafihermawan.dev@gmail.com"
+                />
+                <SocialLink
+                  icon={Instagram}
+                  link="https://instagram.com/rafi_hermw"
+                />
               </div>
             </div>
 
-            {/* Right Column - Optimized Lottie Animation */}
+            {/* Right Content - Lottie Animation */}
             <div
-              className="w-full py-[10%] sm:py-0 lg:w-1/2 h-auto lg:h-[600px] xl:h-[750px] relative flex items-center justify-center order-2 lg:order-2 mt-8 lg:mt-0"
-              onMouseEnter={() => setIsHovering(true)}
-              onMouseLeave={() => setIsHovering(false)}
-              data-aos="fade-left"
-              data-aos-delay="600"
+              className="relative flex justify-center lg:justify-end"
+              data-aos="fade-up"
+              data-aos-delay="1000"
             >
-              <div className="relative w-full opacity-95">
-                <div
-                  className={`absolute inset-0 bg-gradient-to-r from-[#6366f1]/5 to-[#a855f7]/5 rounded-3xl blur-3xl transition-all duration-700 ease-in-out ${
-                    isHovering ? "opacity-40 scale-105" : "opacity-15 scale-100"
-                  }`}
-                ></div>
+              <div
+                className="relative w-80 h-80 sm:w-96 sm:h-96 lg:w-[28rem] lg:h-[28rem] cursor-pointer"
+                onMouseEnter={() => setIsHovering(true)}
+                onMouseLeave={() => setIsHovering(false)}
+              >
+                {/* Background Glow */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#6366f1]/20 to-[#a855f7]/20 rounded-full blur-3xl animate-pulse"></div>
 
-                <div
-                  className={`relative z-10 w-full transform transition-transform duration-500 ${
-                    isHovering ? "scale-105" : "scale-100"
-                  }`}
-                >
+                {/* Lottie Animation */}
+                <div className="relative w-full h-full rounded-2xl overflow-hidden">
                   <DotLottieReact {...lottieOptions} />
                 </div>
+
+                {/* Overlay Effects */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"></div>
               </div>
             </div>
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );
-};
-
-export default memo(Home);
+}

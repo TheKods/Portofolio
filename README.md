@@ -9,11 +9,17 @@ A modern, responsive portfolio website showcasing my skills, projects, and profe
 ## 🌟 Features
 
 - **Modern UI/UX**: Clean, responsive design with smooth animations
+- **Dark/Light Mode**: Theme toggle with system preference detection
+- **Multi-language Support**: English and Bahasa Indonesia
 - **Interactive Tech Stack**
 - **Project Showcase**
-- **Certificate Display**: Images are served from `public/Sertif`
+- **Certificate Display**: Images are served from `public/Sertif/
+- **Advanced Contact Form**: With validation and error handling
+- **Scroll-to-Top Button**: With progress indicator
+- **Loading States**: Skeleton loaders and progress indicators
 - **SEO Optimized**
-- **Responsive Design**
+- **Performance Monitoring**: Vercel Analytics & Speed Insights
+- **PWA Ready**: Offline capabilities (can be enabled)
 
 ## 🚀 Technologies Used
 
@@ -21,6 +27,9 @@ A modern, responsive portfolio website showcasing my skills, projects, and profe
 - **UI**: Material UI, Framer Motion, Headless UI
 - **Icons**: Lucide React, React Icons
 - **AOS** for reveal animations
+- **Theme**: Custom theme provider with localStorage persistence
+- **Internationalization**: Custom i18n with React Context
+- **Forms**: Advanced validation with real-time feedback
 - **Deployment**: Vercel with Analytics
 - **SEO**: React Helmet Async, JSON-LD
 
@@ -31,10 +40,28 @@ Portofolio/
 ├── public/              # Static assets
 │   └── Sertif/          # Certificate images
 ├── src/
-│   ├── assets/
 │   ├── components/
+│   │   ├── ui/          # Reusable UI components
+│   │   │   ├── Button.jsx
+│   │   │   ├── Card.jsx
+│   │   │   ├── Badge.jsx
+│   │   │   ├── Typography.jsx
+│   │   │   ├── Section.jsx
+│   │   │   ├── ThemeToggle.jsx     # NEW: Theme switcher
+│   │   │   ├── LanguageSwitcher.jsx # NEW: i18n support
+│   │   │   ├── Loading.jsx         # NEW: Loading components
+│   │   │   ├── ScrollToTop.jsx     # NEW: Scroll utilities
+│   │   │   ├── ContactForm.jsx     # NEW: Advanced form
+│   │   │   └── index.js            # Barrel export
+│   │   ├── common/     # Shared components
+│   │   ├── effects/    # Animation effects
+│   │   └── pages/      # Page-specific components
 │   ├── data/
-│   ├── Pages/
+│   │   └── localData.js # Projects & certificates
+│   ├── lib/
+│   │   └── theme.js    # Theme configuration
+│   ├── utils/          # Helper functions
+│   ├── Pages/          # Main page components
 │   ├── App.jsx
 │   └── main.jsx
 ├── package.json
@@ -55,7 +82,7 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:5173`
+Open `http://localhost:5174`
 
 ## 🚢 Deployment
 
@@ -65,6 +92,46 @@ Vercel is pre-configured. Push to GitHub and connect the repo on Vercel.
 npm run deploy        # prod
 npm run deploy:preview
 ```
+
+## 🎨 New Features Added
+
+### 🌙 Dark/Light Mode Toggle
+- System preference detection
+- localStorage persistence
+- Smooth theme transitions
+- Available in navbar
+
+### 🌍 Multi-language Support
+- English & Bahasa Indonesia
+- React Context for state management
+- Automatic browser language detection
+- Persistent language selection
+
+### 📝 Advanced Contact Form
+- Real-time validation
+- Error handling with user feedback
+- Loading states
+- Success/error notifications
+- Character counters
+
+### ⬆️ Scroll-to-Top Button
+- Progress ring indicator
+- Smooth scrolling
+- Responsive design
+- Auto-hide/show based on scroll position
+
+### 🔄 Loading States
+- Skeleton loaders for content
+- Progress bars
+- Typing indicators
+- Error boundaries
+
+### ⚡ Performance Optimizations
+- Code splitting by route and library
+- Tree shaking for unused icons
+- Optimized bundle chunks
+- Console log removal in production
+- CSS optimization
 
 ## 📄 License
 

@@ -1,293 +1,239 @@
-import React, { useEffect, useState, useCallback, memo } from "react";
+import React, { useState, useEffect, memo } from "react";
+import { ExternalLink, Github, Calendar, Users, Star } from "lucide-react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import {
-  Code,
-  Award,
-  Boxes,
-  Github,
-  ExternalLink,
-  ArrowRight,
-} from "lucide-react";
 import { projects, certificates } from "../data/localData";
 import TechStackIcon from "../components/pages/TechStackIcon";
 
 // Memoized Components
-const ProjectCard = memo(({ title, description, link, index }) => (
-  <div data-aos="fade-up" data-aos-delay={index * 100} data-aos-duration="600">
-    <a
-      href={link}
-      target="_blank"
-      rel="noreferrer"
-      className="group h-full block"
-    >
-      <div className="h-full bg-white border border-slate-200 rounded-xl p-6 hover:shadow-lg hover:border-blue-300 transition-all duration-300 flex flex-col">
-        <div className="flex-1">
-          <h4 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-blue-700 transition-colors">
-            {title}
-          </h4>
-          <p className="text-slate-600 text-sm leading-relaxed line-clamp-4 mb-4">
-            {description}
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2 text-blue-600 font-medium text-sm group-hover:gap-3 transition-all duration-300">
-          View Project
-          <ArrowRight size={18} />
-        </div>
-      </div>
-    </a>
-  </div>
-));
-
-const CertificateCard = memo(({ title, issuer, date, img, link, index }) => {
-  const normalizedSrc = img?.startsWith("/Sertif")
-    ? img
-    : `/Sertif/${img?.split("/").pop() || ""}`;
-
-  const cardContent = (
-    <div className="h-full bg-white border border-slate-200 rounded-xl overflow-hidden hover:shadow-lg hover:border-blue-300 transition-all duration-300 flex flex-col">
-      {normalizedSrc && (
-        <div className="relative w-full h-48 overflow-hidden bg-slate-100">
-          <img
-            src={normalizedSrc}
-            alt={title}
-            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-            loading="lazy"
-          />
-        </div>
-      )}
-      <div className="p-6 flex-1 flex flex-col">
-        <h4 className="text-base font-bold text-slate-900 mb-2 line-clamp-2">
-          {title}
-        </h4>
-        <p className="text-xs text-slate-600 mb-4">
-          <span className="font-semibold">{issuer}</span>
-          <br />
-          {date}
-        </p>
-        {link && (
-          <div className="mt-auto text-blue-600 font-medium text-sm flex items-center gap-2">
-            View Certificate
-            <ExternalLink size={14} />
-          </div>
-        )}
-      </div>
-    </div>
-  );
+const ProjectCard = memo(({ project, index }) => {
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <div
+      className="relative group"
       data-aos="fade-up"
       data-aos-delay={index * 100}
-      data-aos-duration="600"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      {link ? (
-        <a
-          href={link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group block h-full"
-        >
-          {cardContent}
-        </a>
-      ) : (
-        <div className="block h-full">{cardContent}</div>
-      )}
+      <div className="relative z-10 bg-gray-900/50 backdrop-blur-lg rounded-2xl overflow-hidden border border-white/10 transition-all duration-500 hover:scale-105 hover:shadow-2xl">
+        {/* Background Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+        {/* Image */}
+        <div className="relative h-48 overflow-hidden">
+          <img
+            src={project.img}
+            alt={project.title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+
+          {/* Overlay on Hover */}
+          <div className={`absolute inset-0 bg-black/70 flex items-center justify-center gap-4 transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+            {project.link && (
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 bg-white/20 rounded-full hover:bg-white/30 transition-colors duration-200"
+              >
+                <ExternalLink className="w-5 h-5 text-white" />
+              </a>
+            )}
+            <a
+              href={`https://github.com/TheKods/${project.title.toLowerCase().replace(/\s+/g, '-')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-3 bg-white/20 rounded-full hover:bg-white/30 transition-colors duration-200"
+            >
+              <Github className="w-5 h-5 text-white" />
+            </a>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="p-6">
+          <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors duration-300">
+            {project.title}
+          </h3>
+          <p className="text-gray-400 text-sm leading-relaxed mb-4">
+            {project.description}
+          </p>
+
+          {/* Tech Stack */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            {project.techStack.slice(0, 3).map((tech, techIndex) => (
+              <span
+                key={techIndex}
+                className="px-2 py-1 bg-white/10 rounded-full text-xs text-gray-300"
+              >
+                {tech}
+              </span>
+            ))}
+            {project.techStack.length > 3 && (
+              <span className="px-2 py-1 bg-white/10 rounded-full text-xs text-gray-300">
+                +{project.techStack.length - 3}
+              </span>
+            )}
+          </div>
+
+          {/* Features */}
+          {project.features && (
+            <div className="space-y-1">
+              <h4 className="text-sm font-semibold text-gray-300 mb-2">Key Features:</h4>
+              <ul className="space-y-1">
+                {project.features.slice(0, 2).map((feature, featureIndex) => (
+                  <li key={featureIndex} className="text-xs text-gray-400 flex items-center">
+                    <span className="w-1 h-1 bg-blue-400 rounded-full mr-2"></span>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 });
 
-ProjectCard.displayName = "ProjectCard";
-CertificateCard.displayName = "CertificateCard";
-
-const techStacks = [
-  "HTML",
-  "CSS",
-  "JavaScript",
-  "Java",
-  "Spring Boot",
-  "MySQL",
-  "Google Cloud",
-  "Maven",
-  "Git",
-  "REST API",
-  "Camunda 8",
-  "Postman",
-  "YAML",
-];
-
-// Tabs Component (Custom, no MUI)
-const TabButton = memo(({ active, onClick, icon: Icon, label }) => (
-  <button
-    onClick={onClick}
-    className={`flex items-center gap-2 px-4 py-3 font-semibold text-sm transition-all duration-300 ${
-      active
-        ? "text-blue-700 border-b-2 border-blue-700"
-        : "text-slate-600 hover:text-slate-900 border-b-2 border-transparent"
-    }`}
+const CertificateCard = memo(({ certificate, index }) => (
+  <div
+    className="relative group"
+    data-aos="fade-up"
+    data-aos-delay={index * 100}
   >
-    <Icon size={20} />
-    {label}
-  </button>
+    <div className="relative z-10 bg-gray-900/50 backdrop-blur-lg rounded-2xl p-6 border border-white/10 transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+      <div className="absolute -z-10 inset-0 bg-gradient-to-br from-green-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+      <div className="flex items-start gap-4">
+        <div className="flex-shrink-0">
+          <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-500 rounded-xl flex items-center justify-center">
+            <Star className="w-6 h-6 text-white" />
+          </div>
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-green-400 transition-colors duration-300">
+            {certificate.title}
+          </h3>
+          <p className="text-gray-400 text-sm mb-2">{certificate.issuer}</p>
+          <div className="flex items-center text-xs text-gray-500">
+            <Calendar className="w-3 h-3 mr-1" />
+            {certificate.date}
+          </div>
+          {certificate.credentialId && (
+            <p className="text-xs text-gray-500 mt-1">
+              ID: {certificate.credentialId}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {certificate.description && (
+        <p className="text-gray-400 text-sm mt-4 leading-relaxed">
+          {certificate.description}
+        </p>
+      )}
+    </div>
+  </div>
 ));
 
-TabButton.displayName = "TabButton";
-
-const PortfolioPage = () => {
-  const [activeTab, setActiveTab] = useState(0);
-  const [projectsOpen, setProjectsOpen] = useState(false);
-  const [certsOpen, setCertsOpen] = useState(false);
+export default function Portfolio() {
+  const [activeTab, setActiveTab] = useState("projects");
 
   useEffect(() => {
     AOS.init({
+      duration: 1000,
       once: true,
-      offset: 50,
+      offset: 100,
     });
   }, []);
 
-  const isMobile =
-    typeof window !== "undefined" ? window.innerWidth < 768 : true;
-  const initialItems = isMobile ? 4 : 6;
-
-  const displayedProjects = projectsOpen
-    ? projects
-    : projects.slice(0, initialItems);
-  const displayedCertificates = certsOpen
-    ? certificates
-    : certificates.slice(0, initialItems);
-
   const tabs = [
-    { icon: Code, label: "Projects", id: 0 },
-    { icon: Award, label: "Certificates", id: 1 },
-    { icon: Boxes, label: "Tech Stack", id: 2 },
+    { id: "projects", label: "Projects", count: projects.length },
+    { id: "certificates", label: "Certificates", count: certificates.length },
   ];
 
   return (
-    <section className="py-16 md:py-20 bg-slate-50" id="Portofolio">
-      <div className="max-w-7xl mx-auto px-4 md:px-8">
+    <section
+      className="py-16 md:py-20 bg-transparent relative overflow-hidden"
+      id="Portfolio"
+    >
+      {/* Background Effects */}
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute top-1/3 left-1/3 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/3 right-1/3 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div
-          className="text-center mb-12 md:mb-16"
-          data-aos="fade-up"
-          data-aos-duration="600"
-        >
-          <div className="inline-block mb-4">
-            <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">
-              Portfolio Showcase
-            </span>
+        <div className="text-center mb-12">
+          <div className="inline-block relative group mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#a855f7]">
+              Portfolio
+            </h2>
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-4">
-            Projects & Achievements
-          </h2>
-          <p className="text-base md:text-lg text-slate-600 max-w-2xl mx-auto">
-            Explore my journey through projects, certifications, and technical
-            expertise. Each section represents a milestone in my continuous
-            learning path.
+          <p className="text-gray-400 max-w-2xl mx-auto text-base sm:text-lg">
+            A showcase of my work, projects, and professional achievements
           </p>
         </div>
 
         {/* Tabs */}
-        <div className="mb-12">
-          <div className="border-b border-slate-200 flex gap-2 md:gap-8 overflow-x-auto">
-            {tabs.map((tab) => (
-              <TabButton
-                key={tab.id}
-                active={activeTab === tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                icon={tab.icon}
-                label={tab.label}
-              />
-            ))}
+        <div className="flex justify-center mb-12">
+          <div className="bg-gray-900/50 backdrop-blur-lg rounded-2xl p-2 border border-white/10">
+            <div className="flex gap-2">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                    activeTab === tab.id
+                      ? "bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-white shadow-lg"
+                      : "text-gray-400 hover:text-white hover:bg-white/10"
+                  }`}
+                >
+                  {tab.label}
+                  <span className="ml-2 px-2 py-1 bg-white/20 rounded-full text-xs">
+                    {tab.count}
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Tab Content */}
-        <div className="min-h-96">
-          {/* Projects Tab */}
-          {activeTab === 0 && (
-            <div className="space-y-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {displayedProjects.map((project, index) => (
-                  <ProjectCard key={project.id} {...project} index={index} />
-                ))}
-              </div>
-              {projects.length > initialItems && (
-                <div className="flex justify-center pt-4">
-                  <button
-                    onClick={() => setProjectsOpen(!projectsOpen)}
-                    className="px-6 py-2.5 text-blue-700 hover:text-blue-800 font-semibold text-sm border border-blue-700 hover:border-blue-800 rounded-lg transition-all duration-300 hover:bg-blue-50"
-                  >
-                    {projectsOpen ? "See Less Projects" : "See More Projects"}
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
+        {/* Content */}
+        {activeTab === "projects" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {projects.map((project, index) => (
+              <ProjectCard key={project.id} project={project} index={index} />
+            ))}
+          </div>
+        )}
 
-          {/* Certificates Tab */}
-          {activeTab === 1 && (
-            <div className="space-y-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {displayedCertificates.map((cert, index) => (
-                  <CertificateCard key={cert.id} {...cert} index={index} />
-                ))}
-              </div>
-              {certificates.length > initialItems && (
-                <div className="flex justify-center pt-4">
-                  <button
-                    onClick={() => setCertsOpen(!certsOpen)}
-                    className="px-6 py-2.5 text-blue-700 hover:text-blue-800 font-semibold text-sm border border-blue-700 hover:border-blue-800 rounded-lg transition-all duration-300 hover:bg-blue-50"
-                  >
-                    {certsOpen
-                      ? "See Less Certificates"
-                      : "See More Certificates"}
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
+        {activeTab === "certificates" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {certificates.map((certificate, index) => (
+              <CertificateCard key={certificate.id} certificate={certificate} index={index} />
+            ))}
+          </div>
+        )}
 
-          {/* Tech Stack Tab */}
-          {activeTab === 2 && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-              {techStacks.map((name, index) => (
-                <div
-                  key={name}
-                  data-aos="fade-up"
-                  data-aos-delay={index * 50}
-                  data-aos-duration="600"
-                >
-                  <TechStackIcon name={name} />
-                </div>
-              ))}
+        {/* Tech Stack Section */}
+        {activeTab === "projects" && (
+          <div className="mt-16">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-bold text-white mb-2">Tech Stack</h3>
+              <p className="text-gray-400">Technologies I work with</p>
             </div>
-          )}
-        </div>
-
-        {/* Call to Action */}
-        <div
-          className="mt-16 md:mt-20 text-center"
-          data-aos="fade-up"
-          data-aos-delay="400"
-          data-aos-duration="600"
-        >
-          <p className="text-slate-600 mb-6">
-            Want to see more of my work or collaborate?
-          </p>
-          <a
-            href="https://github.com/TheKods"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-8 py-3 bg-blue-800 text-white font-semibold rounded-lg hover:bg-blue-900 transition-all duration-300 hover:shadow-lg"
-          >
-            <Github size={20} />
-            View on GitHub
-          </a>
-        </div>
+            <TechStackIcon />
+          </div>
+        )}
       </div>
     </section>
   );
-};
-
-export default PortfolioPage;
+}
