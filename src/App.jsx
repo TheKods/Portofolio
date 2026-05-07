@@ -17,7 +17,9 @@ const LandingPage = () => {
   const [showWelcome, setShowWelcome] = useState(true);
 
   return (
-    <div className={`relative min-h-screen overflow-hidden ${!showWelcome ? 'letter-glitch-bg' : ''}`}>
+    <div className="relative min-h-screen overflow-hidden">
+      {!showWelcome && <div className="letter-glitch-bg absolute inset-0 -z-10" />}
+
       <WelcomeOverlay
         isOpen={showWelcome}
         onClose={() => setShowWelcome(false)}
