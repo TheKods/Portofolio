@@ -154,19 +154,19 @@ export default function About() {
       {
         icon: Code,
         color: "from-blue-500 to-cyan-500",
-        value: "50+",
+        value: `${projects.length}`,
         label: "Projects Completed",
         description:
-          "From web applications to mobile apps, delivering quality solutions across various domains.",
+          "High-quality backend and full-stack projects showcasing clean code and best practices.",
         animation: "fade-up",
       },
       {
         icon: Award,
         color: "from-purple-500 to-pink-500",
-        value: "15+",
+        value: `${certificates.length}`,
         label: "Certifications",
         description:
-          "Continuous learning through industry-recognized certifications and courses.",
+          "Professional certifications from leading platforms including Google, Dicoding, and Gunadarma.",
         animation: "fade-up",
       },
       {
@@ -182,9 +182,9 @@ export default function About() {
         icon: UserCheck,
         color: "from-orange-500 to-red-500",
         value: "100%",
-        label: "Client Satisfaction",
+        label: "Quality Focused",
         description:
-          "Committed to delivering exceptional results and exceeding expectations.",
+          "Committed to writing clean code, following best practices, and continuous improvement.",
         animation: "fade-up",
       },
     ],
