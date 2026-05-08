@@ -46,7 +46,7 @@ export const certificates = [
     issuer: "Google via Coursera",
     date: "May 2024",
     img: "/Sertif/Google IT Support.jpg",
-    link: "https://coursera.org/share/adc17c8aedc3de46fbf1360e89b60083",
+    link: "https://www.coursera.org/account/accomplishments/share/adc17c8aedc3de46fbf1360e89b60083",
   },
   {
     id: "3",

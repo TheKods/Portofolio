@@ -108,47 +108,108 @@ const ProjectCard = memo(({ project, index }) => {
   );
 });
 
-const CertificateCard = memo(({ certificate, index }) => (
-  <div
-    className="relative group"
-    data-aos="fade-up"
-    data-aos-delay={index * 100}
-  >
-    <div className="relative z-10 bg-gray-900/50 backdrop-blur-lg rounded-2xl p-6 border border-white/10 transition-all duration-300 hover:scale-105 hover:shadow-2xl">
-      <div className="absolute -z-10 inset-0 bg-gradient-to-br from-green-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+const CertificateCard = memo(({ certificate, index }) => {
+  const [isImageHovered, setIsImageHovered] = useState(false);
 
-      <div className="flex items-start gap-4">
-        <div className="flex-shrink-0">
-          <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-500 rounded-xl flex items-center justify-center">
-            <Star className="w-6 h-6 text-white" />
-          </div>
+  return (
+    <div
+      className="relative group"
+      data-aos="fade-up"
+      data-aos-delay={index * 100}
+    >
+      <div className="relative z-10 bg-gray-900/50 backdrop-blur-lg rounded-2xl overflow-hidden border border-white/10 transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+        <div className="absolute -z-10 inset-0 bg-gradient-to-br from-green-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+        {/* Certificate Image Preview */}
+        <div
+          className="relative h-48 overflow-hidden bg-gray-800"
+          onMouseEnter={() => setIsImageHovered(true)}
+          onMouseLeave={() => setIsImageHovered(false)}
+        >
+          <img
+            src={certificate.img}
+            alt={certificate.title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+
+          {/* Link Button on Image Hover */}
+          {certificate.link && (
+            <div
+              className={`absolute inset-0 bg-black/70 flex items-center justify-center gap-4 transition-opacity duration-300 ${
+                isImageHovered ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              <a
+                href={certificate.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 bg-white/20 rounded-full hover:bg-white/30 transition-colors duration-200"
+                title="View Certificate"
+              >
+                <ExternalLink className="w-5 h-5 text-white" />
+              </a>
+            </div>
+          )}
         </div>
 
-        <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-green-400 transition-colors duration-300">
-            {certificate.title}
-          </h3>
-          <p className="text-gray-400 text-sm mb-2">{certificate.issuer}</p>
-          <div className="flex items-center text-xs text-gray-500">
+        {/* Content */}
+        <div className="p-6">
+          <div className="flex items-start gap-3 mb-3">
+            <div className="flex-shrink-0">
+              <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-blue-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Star className="w-5 h-5 text-white" />
+              </div>
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-green-400 transition-colors duration-300">
+                {certificate.title}
+              </h3>
+              <p className="text-gray-400 text-sm">{certificate.issuer}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center text-xs text-gray-500 mb-3">
             <Calendar className="w-3 h-3 mr-1" />
             {certificate.date}
           </div>
+
           {certificate.credentialId && (
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 mb-3">
               ID: {certificate.credentialId}
             </p>
           )}
+
+          {certificate.description && (
+            <p className="text-gray-400 text-sm leading-relaxed mb-3">
+              {certificate.description}
+            </p>
+          )}
+
+          {/* Link Button in Card Footer */}
+          {certificate.link ? (
+            <div className="flex">
+              <a
+                href={certificate.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500/20 to-blue-500/20 text-green-400 text-sm font-medium rounded-lg hover:from-green-500/30 hover:to-blue-500/30 transition-colors duration-200 group/link"
+              >
+                View Certificate
+                <ExternalLink className="w-4 h-4 group-hover/link:translate-x-0.5 transition-transform" />
+              </a>
+            </div>
+          ) : (
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-700/50 text-gray-400 text-sm font-medium rounded-lg">
+              📄 Certificate Image Only
+            </div>
+          )}
         </div>
       </div>
-
-      {certificate.description && (
-        <p className="text-gray-400 text-sm mt-4 leading-relaxed">
-          {certificate.description}
-        </p>
-      )}
     </div>
-  </div>
-));
+  );
+});
 
 export default function Portfolio() {
   const [activeTab, setActiveTab] = useState("projects");

@@ -18,7 +18,9 @@ const LandingPage = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {!showWelcome && <div className="letter-glitch-bg absolute inset-0 -z-10" />}
+      {!showWelcome && (
+        <div className="letter-glitch-bg absolute inset-0 -z-10" />
+      )}
 
       <WelcomeOverlay
         isOpen={showWelcome}
@@ -40,7 +42,10 @@ const LandingPage = () => {
               "https://soundcloud.com/user-356546060/way-home",
             ]}
           />
-          <div className="relative z-10" style={{ position: 'relative', zIndex: 10 }}>
+          <div
+            className="relative z-10"
+            style={{ position: "relative", zIndex: 10 }}
+          >
             <Navbar />
             <Home />
             <About />
