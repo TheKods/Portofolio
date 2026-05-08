@@ -1,12 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React, { useState } from "react";
 import "./index.css";
-import Home from "./pages/Home";
-import About from "./pages/About";
+import { Home, About, Portfolio, Contact, NotFound } from "./pages/index.js";
 import Navbar from "./components/common/Navbar";
-import Portfolio from "./pages/Portfolio";
-import ContactPage from "./pages/Contact";
-import NotFoundPage from "./pages/404";
 import WelcomeOverlay from "./components/common/WelcomeOverlay";
 import SoundCloudPlayer from "./components/common/SoundCloudPlayer";
 import SkillsSection from "./components/pages/SkillsSection";
@@ -47,7 +43,7 @@ const LandingPage = () => {
             <ExperienceSection />
             <SkillsSection />
             <Portfolio />
-            <ContactPage />
+            <Contact />
             <Footer />
           </div>
         </>
@@ -61,7 +57,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
