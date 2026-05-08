@@ -1,11 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React, { useState } from "react";
 import "./index.css";
-import Home from "./pages/home.jsx";
-import About from "./pages/about.jsx";
-import Portfolio from "./pages/portfolio.jsx";
-import Contact from "./pages/contact.jsx";
-import NotFound from "./pages/404.jsx";
+import Home from "./Pages/Home";
+import About from "./Pages/About";
+import Portfolio from "./Pages/Portfolio";
+import Contact from "./Pages/Contact";
+import NotFound from "./Pages/404";
 import Navbar from "./components/common/Navbar";
 import WelcomeOverlay from "./components/common/WelcomeOverlay";
 import SoundCloudPlayer from "./components/common/SoundCloudPlayer";
