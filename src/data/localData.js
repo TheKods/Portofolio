@@ -193,3 +193,19 @@ export const certificates = [
     link: "",
   },
 ];
+
+export const techStack = [
+  "HTML",
+  "CSS",
+  "JavaScript",
+  "Java",
+  "Spring Boot",
+  "MySQL",
+  "Google Cloud",
+  "Maven",
+  "Git",
+  "REST API",
+  "Camunda 8",
+  "Postman",
+  "YAML",
+];
