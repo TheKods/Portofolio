@@ -9,6 +9,7 @@ import {
   UserCheck,
   Download,
 } from "lucide-react";
+import { motion } from "framer-motion";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { projects, certificates } from "../data/localData";
@@ -75,8 +76,12 @@ const ProfileImage = memo(() => (
 ));
 
 const StatCard = memo(
-  ({ icon: Icon, color, value, label, description, animation }) => (
-    <div
+  ({ icon: Icon, color, value, label, description, animation, index }) => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      viewport={{ once: true }}
       data-aos={animation}
       data-aos-duration={1300}
       className="relative group"
@@ -87,11 +92,22 @@ const StatCard = memo(
         ></div>
 
         <div className="flex items-center justify-between mb-4">
-          <div className="w-16 h-16 rounded-full flex items-center justify-center bg-white/10 transition-transform group-hover:rotate-6">
+          <motion.div
+            className="w-16 h-16 rounded-full flex items-center justify-center bg-white/10 transition-transform group-hover:rotate-6"
+            whileHover={{ rotate: 6, scale: 1.1 }}
+          >
             <Icon className="w-8 h-8 text-white" />
-          </div>
+          </motion.div>
           <div className="text-right">
-            <div className="text-3xl font-bold text-white">{value}</div>
+            <motion.div
+              className="text-3xl font-bold text-white"
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: index * 0.15 }}
+              viewport={{ once: true }}
+            >
+              {value}
+            </motion.div>
           </div>
         </div>
 
@@ -100,7 +116,7 @@ const StatCard = memo(
           <p className="text-gray-400 text-sm leading-relaxed">{description}</p>
         </div>
       </div>
-    </div>
+    </motion.div>
   ),
 );
 
@@ -271,7 +287,7 @@ export default function About() {
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
           {stats.map((stat, index) => (
-            <StatCard key={index} {...stat} />
+            <StatCard key={index} index={index} {...stat} />
           ))}
         </div>
 

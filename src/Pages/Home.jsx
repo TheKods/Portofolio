@@ -10,6 +10,7 @@ import {
   Award,
   Globe,
 } from "lucide-react";
+import { motion } from "framer-motion";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -213,10 +214,7 @@ export default function Home() {
                 data-aos="fade-up"
                 data-aos-delay="1400"
               >
-                <SocialLink
-                  icon={Github}
-                  link="https://github.com/TheKods"
-                />
+                <SocialLink icon={Github} link="https://github.com/TheKods" />
                 <SocialLink
                   icon={Linkedin}
                   link="https://linkedin.com/in/rafi-hermawan"

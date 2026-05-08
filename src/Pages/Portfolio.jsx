@@ -1,8 +1,9 @@
 import React, { useState, useEffect, memo } from "react";
 import { ExternalLink, Github, Calendar, Users, Star } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { projects, certificates } from "../data/localData";
+import { projects, certificates, techStack } from "../data/localData";
 import TechStackIcon from "../components/pages/TechStackIcon";
 
 // Memoized Components
@@ -32,7 +33,9 @@ const ProjectCard = memo(({ project, index }) => {
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
 
           {/* Overlay on Hover */}
-          <div className={`absolute inset-0 bg-black/70 flex items-center justify-center gap-4 transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+          <div
+            className={`absolute inset-0 bg-black/70 flex items-center justify-center gap-4 transition-opacity duration-300 ${isHovered ? "opacity-100" : "opacity-0"}`}
+          >
             {project.link && (
               <a
                 href={project.link}
@@ -44,7 +47,7 @@ const ProjectCard = memo(({ project, index }) => {
               </a>
             )}
             <a
-              href={`https://github.com/TheKods/${project.title.toLowerCase().replace(/\s+/g, '-')}`}
+              href={`https://github.com/TheKods/${project.title.toLowerCase().replace(/\s+/g, "-")}`}
               target="_blank"
               rel="noopener noreferrer"
               className="p-3 bg-white/20 rounded-full hover:bg-white/30 transition-colors duration-200"
@@ -83,10 +86,15 @@ const ProjectCard = memo(({ project, index }) => {
           {/* Features */}
           {project.features && (
             <div className="space-y-1">
-              <h4 className="text-sm font-semibold text-gray-300 mb-2">Key Features:</h4>
+              <h4 className="text-sm font-semibold text-gray-300 mb-2">
+                Key Features:
+              </h4>
               <ul className="space-y-1">
                 {project.features.slice(0, 2).map((feature, featureIndex) => (
-                  <li key={featureIndex} className="text-xs text-gray-400 flex items-center">
+                  <li
+                    key={featureIndex}
+                    className="text-xs text-gray-400 flex items-center"
+                  >
                     <span className="w-1 h-1 bg-blue-400 rounded-full mr-2"></span>
                     {feature}
                   </li>
@@ -207,30 +215,71 @@ export default function Portfolio() {
         </div>
 
         {/* Content */}
-        {activeTab === "projects" && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project, index) => (
-              <ProjectCard key={project.id} project={project} index={index} />
-            ))}
-          </div>
-        )}
+        <AnimatePresence mode="wait">
+          {activeTab === "projects" && (
+            <motion.div
+              key="projects"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {projects.map((project, index) => (
+                  <motion.div
+                    key={project.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                  >
+                    <ProjectCard project={project} index={index} />
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
 
-        {activeTab === "certificates" && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {certificates.map((certificate, index) => (
-              <CertificateCard key={certificate.id} certificate={certificate} index={index} />
-            ))}
-          </div>
-        )}
+          {activeTab === "certificates" && (
+            <motion.div
+              key="certificates"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {certificates.map((certificate, index) => (
+                  <motion.div
+                    key={certificate.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                  >
+                    <CertificateCard
+                      certificate={certificate}
+                      index={index}
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Tech Stack Section */}
         {activeTab === "projects" && (
           <div className="mt-16">
-            <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-white mb-2">Tech Stack</h3>
+            <div className="text-center mb-12">
+              <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">Tech Stack</h3>
               <p className="text-gray-400">Technologies I work with</p>
             </div>
-            <TechStackIcon />
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 lg:gap-6">
+              {techStack.map((tech, index) => (
+                <div key={tech} data-aos="zoom-in" data-aos-delay={index * 50}>
+                  <TechStackIcon name={tech} />
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
