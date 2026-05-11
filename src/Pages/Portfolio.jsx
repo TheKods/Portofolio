@@ -1,6 +1,7 @@
 import React, { useState, useEffect, memo } from "react";
 import { ExternalLink, Github, Calendar, Users, Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { projects, certificates, techStack } from "../data/localData";
@@ -9,14 +10,16 @@ import TechStackIcon from "../components/pages/TechStackIcon";
 // Memoized Components
 const ProjectCard = memo(({ project, index }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div
-      className="relative group"
+      className="relative group cursor-pointer"
       data-aos="fade-up"
       data-aos-delay={index * 100}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={() => navigate(`/project/${project.id}`)}
     >
       <div className="relative z-10 bg-gray-900/50 backdrop-blur-lg rounded-2xl overflow-hidden border border-white/10 transition-all duration-500 hover:scale-105 hover:shadow-2xl">
         {/* Background Gradient */}

@@ -13,6 +13,7 @@ import { motion } from "framer-motion";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { projects, certificates } from "../data/localData";
+import { CountingNumber, StatCardAnimated } from "../components/pages/StatsCounter";
 
 // Memoized Components
 const Header = memo(() => (
@@ -286,9 +287,37 @@ export default function About() {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {stats.map((stat, index) => (
-            <StatCard key={index} index={index} {...stat} />
-          ))}
+          <StatCardAnimated
+            icon={Code}
+            title="Projects Completed"
+            value={projects.length}
+            suffix="+"
+            description="High-quality solutions"
+            delay={0}
+          />
+          <StatCardAnimated
+            icon={Award}
+            title="Certifications"
+            value={certificates.length}
+            description="From top platforms"
+            delay={0.1}
+          />
+          <StatCardAnimated
+            icon={Globe}
+            title="Years Experience"
+            value={3}
+            suffix="+"
+            description="Building solutions"
+            delay={0.2}
+          />
+          <StatCardAnimated
+            icon={UserCheck}
+            title="Quality Focused"
+            value={100}
+            suffix="%"
+            description="Best practices"
+            delay={0.3}
+          />
         </div>
 
         {/* Skills Grid */}

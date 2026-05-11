@@ -1,11 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React, { useState } from "react";
 import "./index.css";
-import Home from "./Pages/Home";
-import About from "./Pages/About";
-import Portfolio from "./Pages/Portfolio";
-import Contact from "./Pages/Contact";
-import NotFound from "./Pages/404";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Portfolio from "./pages/Portfolio";
+import Contact from "./pages/Contact";
+import ProjectDetail from "./pages/ProjectDetail";
+import NotFound from "./pages/404";
 import Navbar from "./components/common/Navbar";
 import WelcomeOverlay from "./components/common/WelcomeOverlay";
 import SoundCloudPlayer from "./components/common/SoundCloudPlayer";
@@ -66,6 +67,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/project/:id" element={<ProjectDetail />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
