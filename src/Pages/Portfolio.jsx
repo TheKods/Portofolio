@@ -6,6 +6,8 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { projects, certificates, techStack } from "../data/localData";
 import TechStackIcon from "../components/pages/TechStackIcon";
+import CertificateLightbox from "../components/pages/CertificateLightbox";
+import ProjectFilter from "../components/pages/ProjectFilter";
 
 // Memoized Components
 const ProjectCard = memo(({ project, index }) => {
@@ -111,14 +113,16 @@ const ProjectCard = memo(({ project, index }) => {
   );
 });
 
-const CertificateCard = memo(({ certificate, index }) => {
+const CertificateCard = memo(({ certificate, index, onView }) => {
   const [isImageHovered, setIsImageHovered] = useState(false);
 
   return (
-    <div
-      className="relative group"
+    <motion.div
+      onClick={() => onView(certificate)}
+      className="relative group cursor-pointer"
       data-aos="fade-up"
       data-aos-delay={index * 100}
+      whileHover={{ y: -5 }}
     >
       <div className="relative z-10 bg-gray-900/50 backdrop-blur-lg rounded-2xl overflow-hidden border border-white/10 transition-all duration-300 hover:scale-105 hover:shadow-2xl">
         <div className="absolute -z-10 inset-0 bg-gradient-to-br from-green-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -193,15 +197,16 @@ const CertificateCard = memo(({ certificate, index }) => {
           {/* Link Button in Card Footer */}
           {certificate.link ? (
             <div className="flex">
-              <a
-                href={certificate.link}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onView(certificate);
+                }}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500/20 to-blue-500/20 text-green-400 text-sm font-medium rounded-lg hover:from-green-500/30 hover:to-blue-500/30 transition-colors duration-200 group/link"
               >
                 View Certificate
                 <ExternalLink className="w-4 h-4 group-hover/link:translate-x-0.5 transition-transform" />
-              </a>
+              </button>
             </div>
           ) : (
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-700/50 text-gray-400 text-sm font-medium rounded-lg">
@@ -216,6 +221,8 @@ const CertificateCard = memo(({ certificate, index }) => {
 
 export default function Portfolio() {
   const [activeTab, setActiveTab] = useState("projects");
+  const [selectedCertificate, setSelectedCertificate] = useState(null);
+  const [filteredProjects, setFilteredProjects] = useState(projects);
 
   useEffect(() => {
     AOS.init({
@@ -288,8 +295,9 @@ export default function Portfolio() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
+              <ProjectFilter projects={projects} onFilterChange={setFilteredProjects} />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {projects.map((project, index) => (
+                {filteredProjects.map((project, index) => (
                   <motion.div
                     key={project.id}
                     initial={{ opacity: 0, y: 20 }}
@@ -322,6 +330,7 @@ export default function Portfolio() {
                     <CertificateCard
                       certificate={certificate}
                       index={index}
+                      onView={setSelectedCertificate}
                     />
                   </motion.div>
                 ))}
@@ -347,6 +356,13 @@ export default function Portfolio() {
           </div>
         )}
       </div>
+
+      {/* Certificate Lightbox Modal */}
+      <CertificateLightbox
+        certificate={selectedCertificate}
+        isOpen={!!selectedCertificate}
+        onClose={() => setSelectedCertificate(null)}
+      />
     </section>
   );
 }
