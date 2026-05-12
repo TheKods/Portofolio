@@ -57,7 +57,10 @@ const Testimonials = () => {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-br from-blue-900/10 via-transparent to-purple-900/10">
+    <section
+      id="Testimonials"
+      className="py-20 bg-gradient-to-br from-blue-900/10 via-transparent to-purple-900/10"
+    >
       <div className="max-w-6xl mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: -20 }}

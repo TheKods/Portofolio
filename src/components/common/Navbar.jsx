@@ -15,6 +15,8 @@ const Navbar = () => {
     { href: "#Experience", label: "Experience" },
     { href: "#Skills", label: "Skills" },
     { href: "#Portofolio", label: "Portfolio" },
+    { href: "#Testimonials", label: "Testimonials" },
+    { href: "#Blog", label: "Blog" },
     { href: "#Contact", label: "Contact" },
   ];
 
@@ -176,6 +178,9 @@ const Navbar = () => {
                 {item.label}
               </a>
             ))}
+            <div className="mt-4 flex items-center justify-center">
+              <ThemeToggle />
+            </div>
           </div>
         </div>
       )}

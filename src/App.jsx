@@ -1,5 +1,6 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import React, { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import "./index.css";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -15,6 +16,7 @@ import SoundCloudPlayer from "./components/common/SoundCloudPlayer";
 import SkillsSection from "./components/pages/SkillsSection";
 import ExperienceSection from "./components/pages/ExperienceSection";
 import Footer from "./components/common/Footer";
+import PageTransition from "./components/common/PageTransition";
 import ScrollProgressBar from "./components/common/ScrollProgressBar";
 import BackToTop from "./components/common/BackToTop";
 import { ThemeProvider } from "./utils/ThemeContext";
@@ -72,16 +74,47 @@ const LandingPage = () => {
   );
 };
 
+const AnimatedRoutes = () => {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route
+          path="/"
+          element={
+            <PageTransition>
+              <LandingPage />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/project/:id"
+          element={
+            <PageTransition>
+              <ProjectDetail />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <PageTransition>
+              <NotFound />
+            </PageTransition>
+          }
+        />
+      </Routes>
+    </AnimatePresence>
+  );
+};
+
 function App() {
   return (
     <ThemeProvider>
       <ToastProvider>
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/project/:id" element={<ProjectDetail />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <AnimatedRoutes />
         </BrowserRouter>
       </ToastProvider>
     </ThemeProvider>

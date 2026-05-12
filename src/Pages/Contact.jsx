@@ -16,14 +16,11 @@ import { motion } from "framer-motion";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { validateForm, isFormValid } from "../utils/formValidation";
+import { useToast } from "../utils/ToastContext";
 
 // Memoized Components
 const ContactInfo = memo(({ icon: Icon, title, content, link, delay }) => (
-  <div
-    className="relative group"
-    data-aos="fade-up"
-    data-aos-delay={delay}
-  >
+  <div className="relative group" data-aos="fade-up" data-aos-delay={delay}>
     <div className="relative z-10 bg-gray-900/50 backdrop-blur-lg rounded-2xl p-6 border border-white/10 transition-all duration-300 hover:scale-105 hover:shadow-2xl">
       <div className="absolute -z-10 inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
@@ -80,6 +77,7 @@ export default function Contact() {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
+  const { addToast } = useToast();
 
   useEffect(() => {
     AOS.init({
@@ -122,11 +120,16 @@ export default function Contact() {
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
       setSubmitStatus("success");
+      addToast(
+        "Message sent successfully! I'll get back to you soon.",
+        "success",
+      );
       setFormData({ name: "", email: "", subject: "", message: "" });
       // Clear success message after 5 seconds
       setTimeout(() => setSubmitStatus(null), 5000);
     } catch (error) {
       setSubmitStatus("error");
+      addToast("Failed to send your message. Please try again.", "error");
     } finally {
       setIsSubmitting(false);
     }
@@ -204,13 +207,18 @@ export default function Contact() {
           {/* Contact Form */}
           <div data-aos="fade-up" data-aos-duration="1000">
             <div className="bg-gray-900/50 backdrop-blur-lg rounded-2xl p-8 border border-white/10">
-              <h3 className="text-2xl font-bold text-white mb-6">Send Message</h3>
+              <h3 className="text-2xl font-bold text-white mb-6">
+                Send Message
+              </h3>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Name {!formErrors.name && <span className="text-blue-400">*</span>}
+                      Name{" "}
+                      {!formErrors.name && (
+                        <span className="text-blue-400">*</span>
+                      )}
                     </label>
                     <input
                       type="text"
@@ -237,7 +245,10 @@ export default function Contact() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Email {!formErrors.email && <span className="text-blue-400">*</span>}
+                      Email{" "}
+                      {!formErrors.email && (
+                        <span className="text-blue-400">*</span>
+                      )}
                     </label>
                     <input
                       type="email"
@@ -266,7 +277,10 @@ export default function Contact() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Subject {!formErrors.subject && <span className="text-blue-400">*</span>}
+                    Subject{" "}
+                    {!formErrors.subject && (
+                      <span className="text-blue-400">*</span>
+                    )}
                   </label>
                   <input
                     type="text"
@@ -294,7 +308,10 @@ export default function Contact() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Message {!formErrors.message && <span className="text-blue-400">*</span>}
+                    Message{" "}
+                    {!formErrors.message && (
+                      <span className="text-blue-400">*</span>
+                    )}
                   </label>
                   <textarea
                     name="message"
@@ -328,8 +345,12 @@ export default function Contact() {
                   >
                     <CheckCircle className="w-5 h-5 flex-shrink-0" />
                     <div>
-                      <p className="font-semibold">Message sent successfully!</p>
-                      <p className="text-sm text-green-300">Thank you for contacting me. I'll get back to you soon.</p>
+                      <p className="font-semibold">
+                        Message sent successfully!
+                      </p>
+                      <p className="text-sm text-green-300">
+                        Thank you for contacting me. I'll get back to you soon.
+                      </p>
                     </div>
                   </motion.div>
                 )}
@@ -352,18 +373,13 @@ export default function Contact() {
                   )}
                 </button>
 
-                {/* Status Messages */}
-                {submitStatus === "success" && (
-                  <div className="flex items-center gap-2 text-green-400 bg-green-400/10 border border-green-400/20 rounded-xl p-4">
-                    <CheckCircle className="w-5 h-5" />
-                    <span>Message sent successfully! I'll get back to you soon.</span>
-                  </div>
-                )}
-
                 {submitStatus === "error" && (
                   <div className="flex items-center gap-2 text-red-400 bg-red-400/10 border border-red-400/20 rounded-xl p-4">
                     <AlertCircle className="w-5 h-5" />
-                    <span>Failed to send message. Please try again or contact me directly.</span>
+                    <span>
+                      Failed to send message. Please try again or contact me
+                      directly.
+                    </span>
                   </div>
                 )}
               </form>
@@ -374,7 +390,10 @@ export default function Contact() {
           <div className="space-y-8">
             {/* Contact Information */}
             <div>
-              <h3 className="text-2xl font-bold text-white mb-6" data-aos="fade-up">
+              <h3
+                className="text-2xl font-bold text-white mb-6"
+                data-aos="fade-up"
+              >
                 Contact Information
               </h3>
               <div className="space-y-4">
@@ -386,7 +405,11 @@ export default function Contact() {
 
             {/* Social Links */}
             <div>
-              <h3 className="text-2xl font-bold text-white mb-6" data-aos="fade-up" data-aos-delay="400">
+              <h3
+                className="text-2xl font-bold text-white mb-6"
+                data-aos="fade-up"
+                data-aos-delay="400"
+              >
                 Follow Me
               </h3>
               <div className="grid grid-cols-3 gap-4">
@@ -411,8 +434,9 @@ export default function Contact() {
                     Let's Start a Conversation
                   </h4>
                   <p className="text-gray-400 text-sm leading-relaxed">
-                    I'm always open to discussing new opportunities, interesting projects,
-                    or just having a chat about technology. Feel free to reach out!
+                    I'm always open to discussing new opportunities, interesting
+                    projects, or just having a chat about technology. Feel free
+                    to reach out!
                   </p>
                 </div>
               </div>

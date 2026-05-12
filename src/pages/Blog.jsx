@@ -12,7 +12,8 @@ const blogPosts = [
     date: "2024-01-15",
     category: "Web Development",
     readTime: "5 min read",
-    image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=500&h=300&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=500&h=300&fit=crop",
     content: `Building scalable web applications requires careful planning and the right architectural decisions. In this guide, we'll explore the key principles that make applications performant and maintainable as they grow.
 
 ## Key Principles
@@ -39,7 +40,8 @@ With the right approach and tools, you can build web applications that grow with
     date: "2024-01-10",
     category: "React",
     readTime: "8 min read",
-    image: "https://images.unsplash.com/photo-1633356122544-f134324ef6db?w=500&h=300&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1633356122544-f134324ef6db?w=500&h=300&fit=crop",
     content: `React Hooks have revolutionized how we write React components. Let's explore the power of hooks and how they can make your code more maintainable.
 
 ## Understanding Hooks
@@ -65,7 +67,8 @@ Learn how to use these hooks effectively to write better React code.`,
     date: "2024-01-05",
     category: "CSS",
     readTime: "6 min read",
-    image: "https://images.unsplash.com/photo-1517694712082-e980a87f8b47?w=500&h=300&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1517694712082-e980a87f8b47?w=500&h=300&fit=crop",
     content: `CSS Grid and Flexbox are two powerful layout systems in modern CSS. Understanding when to use each one is crucial for responsive web design.
 
 ## Flexbox: One-Dimensional Layout
@@ -112,7 +115,10 @@ const Blog = () => {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-br from-purple-900/10 via-transparent to-blue-900/10">
+    <section
+      id="Blog"
+      className="py-20 bg-gradient-to-br from-purple-900/10 via-transparent to-blue-900/10"
+    >
       <div className="max-w-6xl mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -157,7 +163,9 @@ const Blog = () => {
                     <span className="px-3 py-1 bg-blue-500/30 border border-blue-400/50 rounded-full text-xs font-medium text-blue-300">
                       {post.category}
                     </span>
-                    <span className="text-xs text-gray-500">{post.readTime}</span>
+                    <span className="text-xs text-gray-500">
+                      {post.readTime}
+                    </span>
                   </div>
 
                   <h3 className="text-lg font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">
@@ -187,7 +195,10 @@ const Blog = () => {
         </motion.div>
 
         {selectedPost && (
-          <BlogModal post={selectedPost} onClose={() => setSelectedPost(null)} />
+          <BlogModal
+            post={selectedPost}
+            onClose={() => setSelectedPost(null)}
+          />
         )}
       </div>
     </section>
