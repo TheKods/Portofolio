@@ -10,9 +10,12 @@ import {
   MessageCircle,
   CheckCircle,
   AlertCircle,
+  X,
 } from "lucide-react";
+import { motion } from "framer-motion";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { validateForm, isFormValid } from "../utils/formValidation";
 
 // Memoized Components
 const ContactInfo = memo(({ icon: Icon, title, content, link, delay }) => (
@@ -74,6 +77,7 @@ export default function Contact() {
     subject: "",
     message: "",
   });
+  const [formErrors, setFormErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
 
@@ -91,18 +95,36 @@ export default function Contact() {
       ...prev,
       [name]: value,
     }));
+    // Clear error for this field when user starts typing
+    if (formErrors[name]) {
+      setFormErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setSubmitStatus(null);
+
+    // Validate form
+    const errors = validateForm(formData);
+    setFormErrors(errors);
+
+    if (!isFormValid(errors)) {
+      return;
+    }
+
+    setIsSubmitting(true);
 
     // Simulate form submission
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
       setSubmitStatus("success");
       setFormData({ name: "", email: "", subject: "", message: "" });
+      // Clear success message after 5 seconds
+      setTimeout(() => setSubmitStatus(null), 5000);
     } catch (error) {
       setSubmitStatus("error");
     } finally {
@@ -188,63 +210,129 @@ export default function Contact() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Name
+                      Name {!formErrors.name && <span className="text-blue-400">*</span>}
                     </label>
                     <input
                       type="text"
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      required
-                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      className={`w-full px-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
+                        formErrors.name
+                          ? "border-red-500 focus:ring-red-500"
+                          : "border-white/20 focus:ring-blue-500"
+                      }`}
                       placeholder="Your name"
                     />
+                    {formErrors.name && (
+                      <motion.p
+                        initial={{ opacity: 0, y: -5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-2 text-sm text-red-400 flex items-center gap-1"
+                      >
+                        <AlertCircle className="w-4 h-4" />
+                        {formErrors.name}
+                      </motion.p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Email
+                      Email {!formErrors.email && <span className="text-blue-400">*</span>}
                     </label>
                     <input
                       type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      required
-                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      className={`w-full px-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
+                        formErrors.email
+                          ? "border-red-500 focus:ring-red-500"
+                          : "border-white/20 focus:ring-blue-500"
+                      }`}
                       placeholder="your@email.com"
                     />
+                    {formErrors.email && (
+                      <motion.p
+                        initial={{ opacity: 0, y: -5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-2 text-sm text-red-400 flex items-center gap-1"
+                      >
+                        <AlertCircle className="w-4 h-4" />
+                        {formErrors.email}
+                      </motion.p>
+                    )}
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Subject
+                    Subject {!formErrors.subject && <span className="text-blue-400">*</span>}
                   </label>
                   <input
                     type="text"
                     name="subject"
                     value={formData.subject}
                     onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className={`w-full px-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
+                      formErrors.subject
+                        ? "border-red-500 focus:ring-red-500"
+                        : "border-white/20 focus:ring-blue-500"
+                    }`}
                     placeholder="Project discussion"
                   />
+                  {formErrors.subject && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-2 text-sm text-red-400 flex items-center gap-1"
+                    >
+                      <AlertCircle className="w-4 h-4" />
+                      {formErrors.subject}
+                    </motion.p>
+                  )}
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Message
+                    Message {!formErrors.message && <span className="text-blue-400">*</span>}
                   </label>
                   <textarea
                     name="message"
                     value={formData.message}
                     onChange={handleInputChange}
-                    required
                     rows={5}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"
+                    className={`w-full px-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 resize-none ${
+                      formErrors.message
+                        ? "border-red-500 focus:ring-red-500"
+                        : "border-white/20 focus:ring-blue-500"
+                    }`}
                     placeholder="Tell me about your project..."
                   />
+                  {formErrors.message && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-2 text-sm text-red-400 flex items-center gap-1"
+                    >
+                      <AlertCircle className="w-4 h-4" />
+                      {formErrors.message}
+                    </motion.p>
+                  )}
                 </div>
+
+                {submitStatus === "success" && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="p-4 bg-green-500/20 border border-green-500/50 rounded-xl flex items-center gap-3 text-green-400"
+                  >
+                    <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                    <div>
+                      <p className="font-semibold">Message sent successfully!</p>
+                      <p className="text-sm text-green-300">Thank you for contacting me. I'll get back to you soon.</p>
+                    </div>
+                  </motion.div>
+                )}
 
                 <button
                   type="submit"

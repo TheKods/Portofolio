@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Menu, X } from "lucide-react";
 import { transitions, cn } from "../../lib/theme";
+import ThemeToggle from "./ThemeToggle";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -111,28 +112,27 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:block">
-            <div className="flex items-center gap-8">
-              {navItems.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  onClick={(e) => scrollToSection(e, item.href)}
-                  className={cn(
-                    "relative px-1 py-2 text-sm font-medium",
-                    transitions.default,
-                    activeSection === item.href.substring(1)
-                      ? "text-blue-800"
-                      : "text-slate-600 hover:text-slate-900",
-                  )}
-                >
-                  {item.label}
-                  {activeSection === item.href.substring(1) && (
-                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-800 rounded-full" />
-                  )}
-                </a>
-              ))}
-            </div>
+          <div className="hidden md:flex items-center gap-8">
+            {navItems.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                onClick={(e) => scrollToSection(e, item.href)}
+                className={cn(
+                  "relative px-1 py-2 text-sm font-medium",
+                  transitions.default,
+                  activeSection === item.href.substring(1)
+                    ? "text-blue-800"
+                    : "text-slate-600 hover:text-slate-900",
+                )}
+              >
+                {item.label}
+                {activeSection === item.href.substring(1) && (
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-800 rounded-full" />
+                )}
+              </a>
+            ))}
+            <ThemeToggle />
           </div>
 
           {/* Mobile Menu Button */}

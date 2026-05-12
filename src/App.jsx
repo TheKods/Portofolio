@@ -6,6 +6,8 @@ import About from "./pages/About";
 import Portfolio from "./pages/Portfolio";
 import Contact from "./pages/Contact";
 import ProjectDetail from "./pages/ProjectDetail";
+import Blog from "./pages/Blog";
+import Testimonials from "./pages/Testimonials";
 import NotFound from "./pages/404";
 import Navbar from "./components/common/Navbar";
 import WelcomeOverlay from "./components/common/WelcomeOverlay";
@@ -13,6 +15,10 @@ import SoundCloudPlayer from "./components/common/SoundCloudPlayer";
 import SkillsSection from "./components/pages/SkillsSection";
 import ExperienceSection from "./components/pages/ExperienceSection";
 import Footer from "./components/common/Footer";
+import ScrollProgressBar from "./components/common/ScrollProgressBar";
+import BackToTop from "./components/common/BackToTop";
+import { ThemeProvider } from "./utils/ThemeContext";
+import { ToastProvider } from "./utils/ToastContext";
 
 const LandingPage = () => {
   const [showWelcome, setShowWelcome] = useState(true);
@@ -33,6 +39,7 @@ const LandingPage = () => {
 
       {!showWelcome && (
         <>
+          <ScrollProgressBar />
           <SoundCloudPlayer
             defaultVolume={0.8}
             autoPlay
@@ -53,9 +60,12 @@ const LandingPage = () => {
             <ExperienceSection />
             <SkillsSection />
             <Portfolio />
+            <Testimonials />
+            <Blog />
             <Contact />
             <Footer />
           </div>
+          <BackToTop />
         </>
       )}
     </div>
@@ -64,13 +74,17 @@ const LandingPage = () => {
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/project/:id" element={<ProjectDetail />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider>
+      <ToastProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/project/:id" element={<ProjectDetail />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </ToastProvider>
+    </ThemeProvider>
   );
 }
 
