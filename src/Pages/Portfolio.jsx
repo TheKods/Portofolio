@@ -215,7 +215,7 @@ const CertificateCard = memo(({ certificate, index, onView }) => {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 });
 
@@ -295,7 +295,10 @@ export default function Portfolio() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <ProjectFilter projects={projects} onFilterChange={setFilteredProjects} />
+              <ProjectFilter
+                projects={projects}
+                onFilterChange={setFilteredProjects}
+              />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {filteredProjects.map((project, index) => (
                   <motion.div
@@ -343,7 +346,9 @@ export default function Portfolio() {
         {activeTab === "projects" && (
           <div className="mt-16">
             <div className="text-center mb-12">
-              <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">Tech Stack</h3>
+              <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                Tech Stack
+              </h3>
               <p className="text-gray-400">Technologies I work with</p>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 lg:gap-6">
